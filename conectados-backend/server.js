@@ -1,4 +1,4 @@
-const app = require('./app'); // Importa lo que escribimos en app.js
+const app = require('./app');
 
 const PORT = process.env.PORT || 4000;
 
