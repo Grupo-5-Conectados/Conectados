@@ -1,187 +1,197 @@
+# Proyecto Conectados
 
-# 📚 Conectados – Proyecto Full Stack
+Este repositorio contiene dos aplicaciones independientes:
 
-**Conectados** es una aplicación web que conecta usuarios con proveedores de servicios en distintas áreas.  
-Permite a los usuarios registrarse, buscar servicios y agendar citas, mientras que los proveedores pueden publicar sus servicios y administrar su agenda.
-
-El proyecto consta de:
-
-- **Frontend** desarrollado en **React.js**.
-- **Backend** construido con **Node.js**, **Express**, **Sequelize** y **MySQL**.
-
-Actualmente, está configurado para funcionar **localmente**.
+1. **Back-end**: API REST construida con Node.js, Express, Sequelize y MySQL.  
+2. **Front-end**: SPA en React que consume la API.
 
 ---
 
-# 🛠️ Tecnologías usadas
+## 🔸 1. Back-end (API)
 
-| Área        | Herramientas            |
-|-------------|--------------------------|
-| Frontend    | React.js, React Router, Axios |
-| Backend     | Node.js, Express.js, Sequelize |
-| Base de datos | MySQL |
-| Autenticación | JWT (Json Web Tokens), Bcrypt |
-| Desarrollo local | Nodemon |
+### 1.1 Descripción  
+La API expone endpoints para:
 
----
+- **Autenticación** (`/api/auth`): registro, login, `GET /me`  
+- **Usuarios** (`/api/usuarios`): CRUD (admin), perfil propio  
+- **Servicios** (`/api/servicios`): CRUD, listado público, detalle  
+- **Reservas** (`/api/bookings`): crear, listar, actualizar, eliminar  
+- **Denuncias** (`/api/denuncias`): listar, resolver, eliminar (admin)
 
-# 📦 Requerimientos
+### 1.2 Tech Stack  
+- Node.js + Express  
+- Sequelize ORM para MySQL  
+- JWT para autenticación  
+- bcryptjs para hash de contraseñas  
+- dotenv para variables de entorno
 
-Antes de empezar asegúrate de tener instalado:
+### 1.3 Prerrequisitos  
+- Node.js ≥14  
+- MySQL local o remoto  
+- (Opcional) Docker + Docker Compose
 
-- [Node.js](https://nodejs.org/) (v18 o superior recomendado)
-- [MySQL Server](https://dev.mysql.com/downloads/)
-- [Git](https://git-scm.com/)
-- [npm](https://www.npmjs.com/) (incluido con Node.js)
+### 1.4 Variables de entorno  
+Crea un archivo `.env` en la raíz del back con:
 
----
-
-# 🚀 Instalación y ejecución local
-
-## 1. Clona el repositorio
-```bash
-git clone https://github.com/tu_usuario/conectados.git
-```
-
-## 2. Configuración del Backend
-
-### 📂 Entra al backend
-```bash
-cd conectados-backend
-```
-
-### 📦 Instala las dependencias
-```bash
-npm install
-```
-
-### 🛠️ Configura las variables de entorno
-
-Crea un archivo llamado `.env` en `conectados-backend/` con el siguiente contenido:
-
-```env
+```ini
 PORT=4000
 DB_HOST=localhost
-DB_USER=tu_usuario_mysql
-DB_PASSWORD=tu_contraseña_mysql
-DB_NAME=conectados
-JWT_SECRET=UnaClaveMuySegura
+DB_USER=<tu_usuario_mysql>
+DB_PASSWORD=<tu_contraseña_mysql>
+DB_NAME=<nombre_base_de_datos>
+JWT_SECRET=<una_clave_secreta>
 ```
 
-> 📌 *Asegúrate de crear previamente la base de datos `conectados` en MySQL.*
-
-### 🏗️ Inicia el servidor backend
+### 1.5 Instalación y ejecución
 
 ```bash
-npm run dev
-```
-
-Deberías ver algo como:
-
-```
-Servidor backend corriendo en http://localhost:4000
-✅ Tablas sincronizadas en la BD
-```
-
----
-
-## 3. Configuración del Frontend
-
-### 📂 Entra al frontend
-```bash
-cd conectados-frontend
-```
-
-### 📦 Instala las dependencias
-```bash
+cd backend
 npm install
+npx sequelize db:create           # crea la BD si no existe
+npx sequelize db:migrate          # migra los modelos
+npm start                         # arranca en http://localhost:4000
 ```
 
-### 🔧 Ajusta el archivo de conexión API
-
-Edita el archivo `src/services/api.js` y asegúrate de apuntar a tu backend local:
-
-```javascript
-const API_URL = "http://localhost:4000/api"; 
-export default API_URL;
-```
-
-### 🏃‍♂️ Inicia el servidor frontend
+Si usas Docker Compose:
 
 ```bash
-npm run dev
+docker-compose up --build
 ```
 
-(En algunos casos puede ser `npm start` dependiendo cómo esté configurado)
-
-El frontend debería abrirse automáticamente en tu navegador en:
-```
-http://localhost:3000
-```
-
----
-
-# 🔐 Funcionalidades principales
-
-- Registro de usuarios (cliente o proveedor)
-- Login con autenticación JWT
-- Publicación de servicios por parte de proveedores
-- Visualización de servicios públicos
-- Navegación segura basada en roles (Admin, Profesional, Cliente)
-
----
-
-# 📚 Estructura del proyecto
+### 1.6 Estructura de carpetas
 
 ```
-conectados-backend/
-├── controllers/
-├── middleware/
-├── models/
-├── routes/
+backend/
 ├── config/
-├── server.js
-└── .env
-
-conectados-frontend/
-├── src/
-│   ├── pages/
-│   ├── components/
-│   ├── services/
-│   ├── styles/
-│   └── App.js
-└── public/
+│   └── sequelize.js      # configuración Sequelize
+├── controllers/
+│   ├── authControllers.js
+│   ├── usuarioControllers.js
+│   ├── servicioController.js
+│   ├── bookingController.js
+│   └── denunciaController.js
+├── middleware/
+│   └── authMiddleware.js
+├── models/               # definiciones Sequelize
+├── routes/
+│   ├── authRoutes.js
+│   ├── usuarioRoutes.js
+│   ├── servicioRoutes.js
+│   ├── bookingRoutes.js
+│   └── denunciaRoutes.js
+├── .env                  # variables de entorno
+└── server.js             # punto de entrada
 ```
 
+### 1.7 Endpoints clave
+
+| Método | Ruta                       | Acceso                   | Descripción                  |
+|-------:|----------------------------|--------------------------|------------------------------|
+| POST   | `/api/auth/register`       | Público                  | Registrar nuevo usuario      |
+| POST   | `/api/auth/login`          | Público                  | Obtener token JWT            |
+| GET    | `/api/auth/me`             | Usuario autenticado      | Perfil propio                |
+| GET    | `/api/usuarios`            | Admin                    | Listar usuarios              |
+| GET    | `/api/usuarios/:id`        | Admin / Propio ID        | Ver datos de un usuario      |
+| PUT    | `/api/usuarios/me`         | Usuario autenticado      | Actualizar perfil propio     |
+| GET    | `/api/servicios`           | Público                  | Listar servicios             |
+| POST   | `/api/servicios`           | Prestador / Admin        | Crear servicio               |
+| GET    | `/api/servicios/:id`       | Público                  | Ver detalle de servicio      |
+| PATCH  | `/api/bookings/:id`        | Prestador                | Cambiar estado de reserva    |
+| POST   | `/api/bookings`            | Usuario                  | Crear reserva                |
+| GET    | `/api/denuncias`           | Admin                    | Listar denuncias             |
+| PUT    | `/api/denuncias/:id`       | Admin                    | Actualizar estado denuncia   |
+
 ---
 
-# ⚠️ Consideraciones
+## 🔸 2. Front-end (React)
 
-- La sincronización automática de tablas (`sequelize.sync()`) está activada solo en entorno de desarrollo.
-- No subir `.env` ni archivos sensibles a GitHub.
-- Para producción se recomienda usar Azure, Vercel, Railway o servicios equivalentes.
+### 2.1 Descripción  
+SPA en React que permite al usuario:
+
+- Registrarse / Iniciar sesión  
+- Ver y buscar servicios  
+- Reservar (“Mis Citas”)  
+- Publicar / editar servicios (prestadores)  
+- Ver “Mi Agenda” (prestadores)  
+- Administrar usuarios y denuncias (admins)  
+- Ver perfil propio
+
+### 2.2 Tech Stack  
+- React (Create React App)  
+- React Router v6  
+- Axios para llamadas HTTP  
+- SCSS + BEM para estilos  
+- JWT en `localStorage` para auth
+
+### 2.3 Variables de entorno  
+Crea un archivo `.env` en la raíz del front:
+
+```ini
+REACT_APP_API_URL=http://localhost:4000/api
+```
+
+### 2.4 Instalación y ejecución
+
+```bash
+cd frontend
+npm install
+npm start       # abre en http://localhost:3000
+```
+
+### 2.5 Estructura de carpetas
+
+```
+frontend/
+├── public/
+├── src/
+│   ├── components/        # Navbar, PrivateRoute, Formularios…
+│   ├── pages/             # Home, LoginPage, RegisterPage, ProfilePage…
+│   ├── utils/
+│   │   └── api.js         # funciones Axios
+│   ├── styles/            # global.scss, index.css
+│   └── App.js             # configuración de rutas
+└── .env
+```
+
+### 2.6 Rutas principales (cliente)
+
+| Ruta                  | Componente                 | Acceso                |
+|-----------------------|----------------------------|-----------------------|
+| `/`                   | Home                       | Público               |
+| `/register`           | RegisterPage               | Público               |
+| `/login`              | LoginPage                  | Público               |
+| `/perfil`             | ProfilePage                | Usuario / Prestador / Admin |
+| `/servicios`          | ServiceListPage            | Público               |
+| `/servicios/:id`      | ServiceDetailPage          | Público               |
+| `/buscar-servicios`   | SearchServicesPage         | Cliente               |
+| `/mis-citas`          | BookingListPage (cliente)  | Cliente               |
+| `/agenda`             | BookingListPage (agenda)   | Prestador             |
+| `/crear`              | CreateServicePage          | Prestador / Admin     |
+| `/editar/:id`         | Editar                     | Prestador / Admin     |
+| `/bookings`           | BookingListPage (all)      | Cliente / Prestador   |
+| `/gestion-usuarios`   | UserListPage               | Admin                 |
+| `/crear-usuario`      | CreateUserPage             | Admin                 |
+| `/editar-usuario/:id` | UserEditPage               | Admin                 |
+| `/denuncias`          | DenunciasPage              | Admin                 |
+| `*`                   | Página 404                 | Público               |
 
 ---
 
-# 🤝 Contribuciones
+## 📖 Notas para el equipo
 
-Toda mejora o sugerencia es bienvenida.  
-Por favor realiza un Fork del proyecto, crea una rama con tu mejora, y haz un Pull Request.
+- **Roles**:  
+  - `admin` ve y modifica todo.  
+  - `prestador` gestiona sus servicios y reservas.  
+  - `usuario` busca y reserva servicios.  
+- **Protección de rutas**: `PrivateRoute` valida JWT y rol.  
+- **Control de acceso (back)**: middleware `verifyToken` + validaciones en controladores.  
+- **Migraciones**: usa Sequelize CLI para mantener esquemas.  
+- **Testing**: aunque no implementado aún.
 
----
 
-# Integrantes
+## Integrantes
 
 - Tamara León
 - Valentina Lepin   
 - Manuel Vargas
 - Claudio Villagrán
----
-
-# 🎯 Estado del proyecto
-
-✅ Backend funcional localmente  
-✅ Frontend conectado al backend  
-⬜ Próxima etapa: **Despliegue en Azure (VM + Web App)**
-
----

@@ -1,72 +1,125 @@
+// controllers/usuarioControllers.js
+
+'use strict';
+/**
+ * Controlador de Usuarios: operaciones de perfil y administración.
+ */
 const { Usuario } = require('../models');
 
-// Obtener todos los usuarios
-const getUsuarios = async (req, res) => {
+// GET /me
+// Obtener perfil del usuario autenticado
+exports.getMe = async (req, res) => {
   try {
-    const usuarios = await Usuario.findAll();
-    res.json(usuarios);
+    const { id, nombre, correo, rol, fecha_registro } = req.user;
+    return res.status(200).json({ code: 200, data: { id, nombre, correo, rol, fecha_registro } });
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener usuarios', error });
+    console.error('Error en getMe:', error);
+    return res.status(500).json({ code: 500, message: 'Error al obtener perfil.', details: error.message });
   }
 };
 
-// Obtener un usuario por ID
-const getUsuarioById = async (req, res) => {
+// GET /usuarios
+// Listar todos los usuarios (solo admin)
+exports.getUsuarios = async (req, res) => {
+  if (req.user.rol !== 'admin') {
+    return res.status(403).json({ code: 403, message: 'No autorizado.' });
+  }
   try {
-    const usuario = await Usuario.findByPk(req.params.id);
+    const usuarios = await Usuario.findAll({
+      attributes: ['id', 'nombre', 'correo', 'rol', 'fecha_registro']
+    });
+    return res.status(200).json({ code: 200, data: usuarios });
+  } catch (error) {
+    console.error('Error en getUsuarios:', error);
+    return res.status(500).json({ code: 500, message: 'Error al obtener usuarios.', details: error.message });
+  }
+};
+
+// GET /usuarios/:id
+// Obtener un usuario por ID (admin o mismo usuario)
+exports.getUsuarioById = async (req, res) => {
+  const targetId = parseInt(req.params.id, 10);
+  if (req.user.rol !== 'admin' && req.user.id !== targetId) {
+    return res.status(403).json({ code: 403, message: 'No autorizado.' });
+  }
+  try {
+    const usuario = await Usuario.findByPk(targetId, {
+      attributes: ['id', 'nombre', 'correo', 'rol', 'fecha_registro']
+    });
     if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ code: 404, message: 'Usuario no encontrado.' });
     }
-    res.json(usuario);
+    return res.status(200).json({ code: 200, data: usuario });
   } catch (error) {
-    res.status(500).json({ message: 'Error al buscar usuario', error });
+    console.error('Error en getUsuarioById:', error);
+    return res.status(500).json({ code: 500, message: 'Error al buscar usuario.', details: error.message });
   }
 };
 
-// Crear un usuario
-const createUsuario = async (req, res) => {
+// PUT /me
+// Actualizar propio perfil
+exports.updateMe = async (req, res) => {
   try {
-    const { nombre, correo, contraseña, rol } = req.body;
-    const nuevoUsuario = await Usuario.create({ nombre, correo, contraseña, rol });
-    res.status(201).json(nuevoUsuario);
+    const usuario = await Usuario.findByPk(req.user.id);
+    const { nombre, correo, password } = req.body;
+    await usuario.update({ nombre, correo, password });
+    const { id, rol, fecha_registro } = usuario;
+    return res.status(200).json({
+      code: 200,
+      data: { id, nombre: usuario.nombre, correo: usuario.correo, rol, fecha_registro }
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear usuario', error });
+    console.error('Error en updateMe:', error);
+    return res.status(500).json({ code: 500, message: 'Error al actualizar perfil.', details: error.message });
   }
 };
 
-// Actualizar un usuario
-const updateUsuario = async (req, res) => {
+// PUT /usuarios/:id
+// Actualizar usuario por ID (solo admin)
+exports.updateUsuario = async (req, res) => {
+  if (req.user.rol !== 'admin') {
+    return res.status(403).json({ code: 403, message: 'No autorizado.' });
+  }
+  const targetId = parseInt(req.params.id, 10);
   try {
+    const usuario = await Usuario.findByPk(targetId);
+    if (!usuario) {
+      return res.status(404).json({ code: 404, message: 'Usuario no encontrado.' });
+    }
     const { nombre, correo, rol } = req.body;
-    const usuario = await Usuario.findByPk(req.params.id);
-    if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
     await usuario.update({ nombre, correo, rol });
-    res.json(usuario);
+    return res.status(200).json({
+      code: 200,
+      data: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        rol: usuario.rol,
+        fecha_registro: usuario.fecha_registro
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar usuario', error });
+    console.error('Error en updateUsuario:', error);
+    return res.status(500).json({ code: 500, message: 'Error al actualizar usuario.', details: error.message });
   }
 };
 
-// Eliminar un usuario
-const deleteUsuario = async (req, res) => {
+// DELETE /usuarios/:id
+// Eliminar usuario por ID (solo admin)
+exports.deleteUsuario = async (req, res) => {
+  if (req.user.rol !== 'admin') {
+    return res.status(403).json({ code: 403, message: 'No autorizado.' });
+  }
+  const targetId = parseInt(req.params.id, 10);
   try {
-    const usuario = await Usuario.findByPk(req.params.id);
+    const usuario = await Usuario.findByPk(targetId);
     if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ code: 404, message: 'Usuario no encontrado.' });
     }
     await usuario.destroy();
-    res.json({ message: 'Usuario eliminado correctamente' });
+    return res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar usuario', error });
+    console.error('Error en deleteUsuario:', error);
+    return res.status(500).json({ code: 500, message: 'Error al eliminar usuario.', details: error.message });
   }
-};
-
-module.exports = {
-  getUsuarios,
-  getUsuarioById,
-  createUsuario,
-  updateUsuario,
-  deleteUsuario,
 };

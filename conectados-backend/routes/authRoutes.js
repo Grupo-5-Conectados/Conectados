@@ -1,17 +1,15 @@
 // routes/authRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const { register, login } = require('../controllers/authController');
+const { verifyToken } = require('../middleware/authMiddleware');
 
-// POST /api/auth/register
+// Registro e inicio de sesión públicos
 router.post('/register', register);
+router.post('/login',    login);
 
-// POST /api/auth/login
-router.post('/login', login);
-
-// GET /api/auth/test-db  (dejamos tu prueba de conexión)
-router.get('/test-db', async (req, res) => {
+// GET /api/auth/test-db  → solo para debugging de conexión (requiere token)
+router.get('/test-db', verifyToken, async (req, res) => {
   const db = require('../config/db');
   try {
     const [rows] = await db.query('SELECT NOW() AS hora_actual');
