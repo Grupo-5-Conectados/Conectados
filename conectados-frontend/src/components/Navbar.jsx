@@ -1,84 +1,73 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/navbar.scss'; 
 
 const Navbar = () => {
-  // Obtener el rol del usuario desde localStorage
   const userRole = localStorage.getItem('userRole');
+  const navigate = useNavigate();
 
-  const navbarStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '1rem 2rem',
-    backgroundColor: '#ffffff',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1000,
-  };
-
-  const logoStyle = {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    color: '#333',
-    textDecoration: 'none',
-  };
-
-  const linksStyle = {
-    display: 'flex',
-    gap: '1.5rem',
-  };
-
-  const linkStyle = {
-    textDecoration: 'none',
-    color: '#555',
-    fontSize: '1rem',
-    fontWeight: '500',
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    navigate('/');
   };
 
   return (
-    <nav style={navbarStyle}>
-      <Link to="/" style={logoStyle}>
+    <nav className="navbar">
+      <Link to="/" className="navbar__logo">
         Conectados
       </Link>
-      <div style={linksStyle}>
-        <Link to="/" style={linkStyle}>Inicio</Link>
-        <Link to="/explorar" style={linkStyle}>Explorar</Link>
-        <Link to="/servicios" style={linkStyle}>Servicios</Link>
-        
-        {/* Mostrar diferentes enlaces según el rol del usuario */}
-        {userRole === 'admin' && (
-          <>
-            <Link to="/gestion-usuarios" style={linkStyle}>Gestionar Usuarios</Link>
-            <Link to="/denuncias" style={linkStyle}>Gestionar Denuncias</Link>
-            <Link to="/panel-admin" style={linkStyle}>Panel Admin</Link>
-          </>
-        )}
-        
-        {userRole === 'profesional' && (
-          <>
-            <Link to="/agenda" style={linkStyle}>Mi Agenda</Link>
-            <Link to="/publicar-servicio" style={linkStyle}>Publicar Servicio</Link>
-            <Link to="/mensajes" style={linkStyle}>Mensajes</Link>
-            <Link to="/perfil" style={linkStyle}>Mi Perfil</Link>
-          </>
-        )}
-
-        {userRole === 'cliente' && (
-          <>
-            <Link to="/buscar-servicios" style={linkStyle}>Buscar Servicios</Link>
-            <Link to="/mis-citas" style={linkStyle}>Mis Citas</Link>
-            <Link to="/mensajes" style={linkStyle}>Mensajes</Link>
-          </>
-        )}
+      <ul className="navbar__links">
+        <li>
+          <Link to="/" className="navbar__link">Inicio</Link>
+        </li>
+        <li>
+          <Link to="/explorar" className="navbar__link">Explorar</Link>
+        </li>
+        <li>
+          <Link to="/servicios" className="navbar__link">Servicios</Link>
+        </li>
 
         {!userRole && (
           <>
-            <Link to="/register" style={linkStyle}>Registrarse</Link>
-            <Link to="/login" style={linkStyle}>Iniciar sesión</Link>
+            <li><Link to="/register" className="navbar__link">Registrarse</Link></li>
+            <li><Link to="/login" className="navbar__link">Iniciar sesión</Link></li>
           </>
         )}
-      </div>
+
+        {userRole === 'admin' && (
+          <>
+            <li><Link to="/gestion-usuarios" className="navbar__link">Gestionar Usuarios</Link></li>
+            <li><Link to="/denuncias" className="navbar__link">Denuncias</Link></li>
+            <li><Link to="/panel-admin" className="navbar__link">Panel Admin</Link></li>
+          </>
+        )}
+
+        {userRole === 'prestador' && (
+          <>
+            <li><Link to="/agenda" className="navbar__link">Mi Agenda</Link></li>
+            <li><Link to="/crear" className="navbar__link">Publicar Servicio</Link></li>
+            <li><Link to="/mensajes" className="navbar__link">Mensajes</Link></li>
+            <li><Link to="/perfil" className="navbar__link">Mi Perfil</Link></li>
+          </>
+        )}
+
+        {userRole === 'usuario' && (
+          <>
+            <li><Link to="/buscar-servicios" className="navbar__link">Buscar Servicios</Link></li>
+            <li><Link to="/mis-citas" className="navbar__link">Mis Citas</Link></li>
+            <li><Link to="/mensajes" className="navbar__link">Mensajes</Link></li>
+          </>
+        )}
+
+        {userRole && (
+          <li>
+            <button onClick={handleLogout} className="navbar__logout">
+              Cerrar sesión
+            </button>
+          </li>
+        )}
+      </ul>
     </nav>
   );
 };

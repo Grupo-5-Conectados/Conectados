@@ -1,12 +1,9 @@
+// src/utils/api.js
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
-
-const api = axios.create({
-  baseURL: API_URL,
-});
+const api = axios.create({ baseURL: API_URL });
 
 // Inyecta el JWT en cada petición
 api.interceptors.request.use(config => {
@@ -17,38 +14,57 @@ api.interceptors.request.use(config => {
 
 // Auth
 export function register(data) {
-  // data: { nombre, correo, password }
   return api.post('/auth/register', data);
 }
-
 export function login(data) {
-  // data: { correo, password }
   return api.post('/auth/login', data);
 }
 
+// Usuarios (para AdminPanel y CRUD)
+export function getUsers() {
+  return api.get('/usuarios');
+}
+export function createUser(data) {
+  return api.post('/usuarios', data);
+}
+export function updateUser(id, data) {
+  return api.put(`/usuarios/${id}`, data);
+}
+export function deleteUser(id) {
+  return api.delete(`/usuarios/${id}`);
+}
+export function getUserById(id) {              // ← AÑADIDO
+  return api.get(`/usuarios/${id}`);
+}
+export function getMe() {
+  return api.get('/usuarios/me');
+}
 // Servicios
 export function getServices() {
   return api.get('/servicios');
 }
-
+export function getServiceById(id) {
+  return api.get(`/servicios/${id}`);
+}
 export function createService(data) {
-  // data: { titulo, descripcion, precio, categoria, zona, duracion }
   return api.post('/servicios', data);
+}
+export function updateService(id, data) {
+  return api.put(`/servicios/${id}`, data);
 }
 
 // Reservas
 export function getBookings() {
   return api.get('/bookings');
 }
-
 export function createBooking(data) {
-  // data: { servicioId, fecha_hora }
   return api.post('/bookings', data);
 }
-
 export function updateBooking(id, body) {
-  // body: { estado }
   return api.patch(`/bookings/${id}`, body);
+}
+export function deleteBooking(id) {
+  return api.delete(`/bookings/${id}`);
 }
 
 export default api;

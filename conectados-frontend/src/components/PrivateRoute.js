@@ -3,14 +3,21 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ element, allowedRoles }) => {
+  const token    = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
-  
-  // Si no hay usuario o el rol no está permitido, redirige al login
-  if (!userRole || !allowedRoles.includes(userRole)) {
+
+  // Si no hay token, redirige a login
+  if (!token) {
     return <Navigate to="/login" />;
   }
 
-  return element; // Si el usuario tiene el rol permitido, muestra el componente
+  // Si el rol no está permitido, redirige a home
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/" />;
+  }
+
+  // Si todo OK, renderiza el componente
+  return element;
 };
 
 export default PrivateRoute;
