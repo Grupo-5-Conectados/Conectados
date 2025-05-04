@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { updateBooking, deleteBooking, getBookings } from '../utils/api';
-import Navbar from '../components/Navbar'; // Importar Navbar
+import Navbar from '../components/Navbar'; 
 import '../styles/BookingListPage.scss';
 
 const BookingListPage = () => {

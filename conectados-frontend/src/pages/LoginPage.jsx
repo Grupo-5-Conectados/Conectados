@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../utils/api';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+import Navbar from '../components/Navbar'; // Asegúrate de importar la Navbar
 import '../styles/login_page.scss';
 
 const LoginPage = () => {
@@ -32,27 +33,30 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h2>Iniciar Sesión</h2>
-        {error && <div className="alert alert--error">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <label>Correo electrónico</label>
-          <input
-            type="email"
-            value={formData.correo}
-            onChange={e => handleChange('correo', e.target.value)}
-            required
-          />
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={formData.password}
-            onChange={e => handleChange('password', e.target.value)}
-            required
-          />
-          <button type="submit" className="btn">Entrar</button>
-        </form>
+    <div>
+      <Navbar /> {/* Aquí agregas la Navbar para que siempre esté visible */}
+      <div className="login-page">
+        <div className="login-card">
+          <h2>Iniciar Sesión</h2>
+          {error && <div className="alert alert--error">{error}</div>}
+          <form onSubmit={handleSubmit}>
+            <label>Correo electrónico</label>
+            <input
+              type="email"
+              value={formData.correo}
+              onChange={e => handleChange('correo', e.target.value)}
+              required
+            />
+            <label>Contraseña</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={e => handleChange('password', e.target.value)}
+              required
+            />
+            <button type="submit" className="btn">Entrar</button>
+          </form>
+        </div>
       </div>
     </div>
   );

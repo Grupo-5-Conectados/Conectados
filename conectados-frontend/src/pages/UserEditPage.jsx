@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { getUserById, updateUser } from '../utils/api';
 import { useParams, useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar'; 
 import '../styles/UserEditPage.scss';
 
 const UserEditPage = () => {
@@ -35,42 +36,45 @@ const UserEditPage = () => {
   };
 
   return (
-    <div className="user-edit-page">
-      <h2>Editar Usuario</h2>
-      {error && <div className="alert alert--error">{error}</div>}
-      <form onSubmit={handleSubmit} className="user-edit-form">
-        <label>Nombre</label>
-        <input
-          type="text"
-          value={formData.nombre}
-          onChange={e => handleChange('nombre', e.target.value)}
-          required
-        />
+    <>
+      <Navbar />
+      <div className="user-edit-page">
+        <h2>Editar Usuario</h2>
+        {error && <div className="alert alert--error">{error}</div>}
+        <form onSubmit={handleSubmit} className="user-edit-form">
+          <label>Nombre</label>
+          <input
+            type="text"
+            value={formData.nombre}
+            onChange={e => handleChange('nombre', e.target.value)}
+            required
+          />
 
-        <label>Correo</label>
-        <input
-          type="email"
-          value={formData.correo}
-          onChange={e => handleChange('correo', e.target.value)}
-          required
-        />
+          <label>Correo</label>
+          <input
+            type="email"
+            value={formData.correo}
+            onChange={e => handleChange('correo', e.target.value)}
+            required
+          />
 
-        <label>Rol</label>
-        <select
-          value={formData.rol}
-          onChange={e => handleChange('rol', e.target.value)}
-          required
-        >
-          <option value="usuario">Usuario</option>
-          <option value="prestador">Prestador</option>
-          <option value="admin">Admin</option>
-        </select>
+          <label>Rol</label>
+          <select
+            value={formData.rol}
+            onChange={e => handleChange('rol', e.target.value)}
+            required
+          >
+            <option value="usuario">Usuario</option>
+            <option value="prestador">Prestador</option>
+            <option value="admin">Admin</option>
+          </select>
 
-        <button type="submit" className="btn">
-          Guardar
-        </button>
-      </form>
-    </div>
+          <button type="submit" className="btn">
+            Guardar
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
