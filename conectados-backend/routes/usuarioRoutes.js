@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken, authorizeRoles } = require('../middleware/authMiddleware');
+const validarUsuario = require('../middleware/validarUsuario');
 const {
   getMe,
   getUsuarios,
@@ -16,7 +17,7 @@ const {
 
 // Rutas que requieren autenticación pero no necesariamente ser admin
 router.get('/me', verifyToken, getMe); // Mover esta ruta antes del middleware de admin
-router.put('/me', verifyToken, updateMe); // Para actualizar el propio perfil
+router.put('/me', validarUsuario, verifyToken, updateMe); // Para actualizar el propio perfil
 
 // Rutas que requieren ser admin (se aplica el middleware a todas las siguientes)
 router.use(verifyToken, authorizeRoles('admin'));
@@ -28,7 +29,7 @@ router.get('/', getUsuarios);
 router.get('/:id', getUsuarioById);
 
 // PUT    /api/usuarios/:id     → actualizar usuario (solo admin)
-router.put('/:id', updateUsuario);
+router.put('/:id', validarUsuario, updateUsuario);
 
 // DELETE /api/usuarios/:id     → eliminar usuario (solo admin)
 router.delete('/:id', deleteUsuario);
