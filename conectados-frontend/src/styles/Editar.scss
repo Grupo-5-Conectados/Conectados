@@ -50,6 +50,13 @@
           transition: background 0.3s;
           &:hover { background: #1e8449; }
         }
+        .btn--danger {
+          background: #e74c3c;
+        
+          &:hover {
+            background: #c0392b;
+          }
+        }
       }
     }
   }
