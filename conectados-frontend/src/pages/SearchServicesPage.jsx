@@ -1,14 +1,15 @@
 // src/pages/SearchServicesPage.jsx
 import React, { useEffect, useState } from 'react';
 import { getServices } from '../utils/api';
+import Navbar from '../components/Navbar';  // Importa la Navbar
 import '../styles/SearchServicesPage.scss';
 
 const SearchServicesPage = () => {
-  const [services, setServices]       = useState([]);
-  const [searchText, setSearchText]   = useState('');
+  const [services, setServices] = useState([]);
+  const [searchText, setSearchText] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
-  const [zonaFilter, setZonaFilter]   = useState('');
-  const [error, setError]             = useState('');
+  const [zonaFilter, setZonaFilter] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getServices()
@@ -21,7 +22,7 @@ const SearchServicesPage = () => {
       s.titulo.toLowerCase().includes(searchText.toLowerCase()) ||
       s.descripcion.toLowerCase().includes(searchText.toLowerCase());
     const matchCat = categoryFilter === '' || s.categoria === categoryFilter;
-    const matchZona= zonaFilter === '' || s.zona.toLowerCase().includes(zonaFilter.toLowerCase());
+    const matchZona = zonaFilter === '' || s.zona.toLowerCase().includes(zonaFilter.toLowerCase());
     return matchText && matchCat && matchZona;
   });
 
@@ -29,6 +30,7 @@ const SearchServicesPage = () => {
 
   return (
     <div className="search-services-page">
+      <Navbar /> {/* Inserta la Navbar aquí */}
       <h2>Buscar Servicios</h2>
       {error && <div className="alert alert--error">{error}</div>}
 

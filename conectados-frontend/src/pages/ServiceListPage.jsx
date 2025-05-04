@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getServices } from '../utils/api';
+import Navbar from '../components/Navbar';  // Importa la Navbar
 import '../styles/ServiceListPage.scss';
 
 const ServiceListPage = () => {
   const [services, setServices] = useState([]);
-  const [error, setError]       = useState('');
-  const userRole                = localStorage.getItem('userRole');
+  const [error, setError] = useState('');
+  const userRole = localStorage.getItem('userRole');
 
   useEffect(() => {
     getServices()
@@ -17,8 +18,11 @@ const ServiceListPage = () => {
 
   return (
     <div className="service-list-page">
+      <Navbar /> {/* Inserta la Navbar aquí */}
+
       <h2>Servicios Disponibles</h2>
       {error && <div className="alert alert--error">{error}</div>}
+
       <div className="service-grid">
         {services.map(s => (
           <div key={s.id} className="service-card">
@@ -35,6 +39,7 @@ const ServiceListPage = () => {
         ))}
       </div>
     </div>
-)};
+  );
+};
 
 export default ServiceListPage;
