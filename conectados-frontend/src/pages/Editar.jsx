@@ -93,13 +93,9 @@ const Editar = () => {
           <input type="number" value={formData.duracion} onChange={e => handleChange('duracion', e.target.value)} />
 
           <button type="submit" className="btn">Guardar Cambios</button>
-          <button onClick={handleDelete} className="btn btn--danger">
-          Eliminar Servicio
-        </button>
+          <button onClick={handleDelete} className="btn btn--danger">Eliminar Servicio</button>
         </form>
-
         <hr />
-
       </div>
     </div>
   );

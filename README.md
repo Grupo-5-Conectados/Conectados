@@ -111,7 +111,8 @@ SPA en React que permite al usuario:
 - Registrarse / Iniciar sesión  
 - Ver y buscar servicios  
 - Reservar (“Mis Citas”)  
-- Publicar / editar servicios (prestadores)  
+- Publicar / editar servicios (prestadores)
+- Eliminar servicio (prestadores)  
 - Ver “Mi Agenda” (prestadores)  
 - Administrar usuarios y denuncias (admins)  
 - Ver perfil propio

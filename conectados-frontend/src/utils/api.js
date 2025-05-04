@@ -52,12 +52,9 @@ export function createService(data) {
 export function updateService(id, data) {
   return api.put(`/servicios/${id}`, data);
 }
-
 export function deleteService(id) {
   return api.delete(`/servicios/${id}`);
 }
-
-
 
 // Reservas
 export function getBookings() {
