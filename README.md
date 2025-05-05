@@ -47,16 +47,9 @@ JWT_SECRET=<una_clave_secreta>
 ```bash
 cd backend
 npm install
-npx sequelize db:create           # crea la BD si no existe
-npx sequelize db:migrate          # migra los modelos
 npm start                         # arranca en http://localhost:4000
 ```
-
-Si usas Docker Compose:
-
-```bash
-docker-compose up --build
-```
+Se debe tener previamente creada la base de datos a usar, las tablas se generan automaticamente despues de iniciar.
 
 ### 1.6 Estructura de carpetas
 
