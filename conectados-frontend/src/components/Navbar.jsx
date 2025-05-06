@@ -1,16 +1,20 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import '../styles/navbar.scss'; 
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import '../styles/navbar.scss';
 
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
   const navigate = useNavigate();
+  const location = useLocation(); // Obtenemos la ruta actual
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
     navigate('/');
   };
+
+  // Verificamos si estamos en la página de login o registro para no mostrar los botones correspondientes
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <nav className="navbar">
@@ -21,14 +25,13 @@ const Navbar = () => {
         <li>
           <Link to="/" className="navbar__link">Inicio</Link>
         </li>
-        <li>
-          <Link to="/explorar" className="navbar__link">Explorar</Link>
-        </li>
+        {/* El botón de Explorar ha sido eliminado */}
         <li>
           <Link to="/servicios" className="navbar__link">Servicios</Link>
         </li>
 
-        {!userRole && (
+        {/* Condicional para no mostrar los botones de login/registro en las páginas correspondientes */}
+        {!userRole && !isAuthPage && (
           <>
             <li><Link to="/register" className="navbar__link">Registrarse</Link></li>
             <li><Link to="/login" className="navbar__link">Iniciar sesión</Link></li>

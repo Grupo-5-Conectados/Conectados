@@ -1,7 +1,7 @@
-// src/pages/RegisterPage.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../utils/api';
+import Navbar from '../components/Navbar'; // Importar Navbar
 import '../styles/register_page.scss';
 
 const RegisterPage = () => {
@@ -52,71 +52,75 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="register-page">
-      <div className="register-card">
-        <h2>Crear Cuenta</h2>
+    <div>
+      <Navbar /> {/* Aquí se agrega la Navbar en la página de registro */}
 
-        {error &&   <div className="alert alert--error">{error}</div>}
-        {success && <div className="alert alert--success">{success}</div>}
+      <div className="register-page">
+        <div className="register-card">
+          <h2>Crear Cuenta</h2>
 
-        <form onSubmit={handleSubmit}>
-          <label>Nombre completo</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={e => handleChange('name', e.target.value)}
-            required
-          />
+          {error &&   <div className="alert alert--error">{error}</div>}
+          {success && <div className="alert alert--success">{success}</div>}
 
-          <label>Email</label>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={e => handleChange('email', e.target.value)}
-            required
-          />
+          <form onSubmit={handleSubmit}>
+            <label>Nombre completo</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={e => handleChange('name', e.target.value)}
+              required
+            />
 
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={formData.password}
-            onChange={e => handleChange('password', e.target.value)}
-            required
-          />
+            <label>Email</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={e => handleChange('email', e.target.value)}
+              required
+            />
 
-          <label>Confirmar contraseña</label>
-          <input
-            type="password"
-            value={formData.confirmPassword}
-            onChange={e => handleChange('confirmPassword', e.target.value)}
-            required
-          />
+            <label>Contraseña</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={e => handleChange('password', e.target.value)}
+              required
+            />
 
-          <div className="user-type">
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="cliente"
-                checked={formData.userType === 'cliente'}
-                onChange={e => handleChange('userType', e.target.value)}
-              />
-              Cliente
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="profesional"
-                checked={formData.userType === 'profesional'}
-                onChange={e => handleChange('userType', e.target.value)}
-              />
-              Profesional
-            </label>
-          </div>
+            <label>Confirmar contraseña</label>
+            <input
+              type="password"
+              value={formData.confirmPassword}
+              onChange={e => handleChange('confirmPassword', e.target.value)}
+              required
+            />
 
-          <button type="submit" className="btn">Registrarse</button>
-        </form>
+            <div className="user-type">
+              <label>
+                <input
+                  type="radio"
+                  name="userType"
+                  value="cliente"
+                  checked={formData.userType === 'cliente'}
+                  onChange={e => handleChange('userType', e.target.value)}
+                />
+                Cliente
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="userType"
+                  value="profesional"
+                  checked={formData.userType === 'profesional'}
+                  onChange={e => handleChange('userType', e.target.value)}
+                />
+                Profesional
+              </label>
+            </div>
+
+            <button type="submit" className="btn">Registrarse</button>
+          </form>
+        </div>
       </div>
     </div>
   );

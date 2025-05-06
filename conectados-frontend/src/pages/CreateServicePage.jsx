@@ -1,7 +1,12 @@
 // src/pages/CreateServicePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { createService, createDisponibilidad } from '../utils/api';
+=======
+import { createService } from '../utils/api';
+import Navbar from '../components/Navbar'; 
+>>>>>>> aa3f525ad2646211fc8c2499457eabb78489ce89
 import '../styles/CreateServicePage.scss';
 
 const CreateServicePage = () => {
@@ -14,9 +19,13 @@ const CreateServicePage = () => {
     zona: '',
     duracion: ''
   });
+<<<<<<< HEAD
   const [slotDate, setSlotDate] = useState('');
   const [newSlots, setNewSlots] = useState([]);
   const [error, setError]     = useState('');
+=======
+  const [error, setError] = useState('');
+>>>>>>> aa3f525ad2646211fc8c2499457eabb78489ce89
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
@@ -43,10 +52,21 @@ const CreateServicePage = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setError(''); setSuccess('');
+    setError('');
+    setSuccess('');
 
+<<<<<<< HEAD
     const { titulo, descripcion, precio, categoria, zona, duracion } = formData;
     if (!titulo || !descripcion || !precio || !categoria || !zona) {
+=======
+    if (
+      !formData.titulo ||
+      !formData.descripcion ||
+      !formData.precio ||
+      !formData.categoria ||
+      !formData.zona
+    ) {
+>>>>>>> aa3f525ad2646211fc8c2499457eabb78489ce89
       setError('Completa todos los campos obligatorios');
       return;
     }
@@ -56,6 +76,7 @@ const CreateServicePage = () => {
     }
 
     try {
+<<<<<<< HEAD
       // 1) Crear servicio
       const res = await createService({
         titulo,
@@ -64,6 +85,15 @@ const CreateServicePage = () => {
         categoria,
         zona,
         duracion: duracion ? parseInt(duracion, 10) : null
+=======
+      await createService({
+        titulo: formData.titulo,
+        descripcion: formData.descripcion,
+        precio: parseFloat(formData.precio),
+        categoria: formData.categoria,
+        zona: formData.zona,
+        duracion: formData.duracion ? parseInt(formData.duracion, 10) : null
+>>>>>>> aa3f525ad2646211fc8c2499457eabb78489ce89
       });
       const serviceId = res.data.data.id || res.data.id;
 
@@ -80,60 +110,63 @@ const CreateServicePage = () => {
   };
 
   return (
-    <div className="create-service-page">
-      <div className="service-card">
-        <h2>Publicar Servicio</h2>
+    <>
+      <Navbar />
+      <div className="create-service-page">
+        <div className="service-card">
+          <h2>Publicar Servicio</h2>
 
-        {error   && <div className="alert alert--error">{error}</div>}
-        {success && <div className="alert alert--success">{success}</div>}
+          {error && <div className="alert alert--error">{error}</div>}
+          {success && <div className="alert alert--success">{success}</div>}
 
-        <form onSubmit={handleSubmit}>
-          <label>Título</label>
-          <input
-            type="text"
-            value={formData.titulo}
-            onChange={e => handleChange('titulo', e.target.value)}
-            required
-          />
+          <form onSubmit={handleSubmit}>
+            <label>Título</label>
+            <input
+              type="text"
+              value={formData.titulo}
+              onChange={e => handleChange('titulo', e.target.value)}
+              required
+            />
 
-          <label>Descripción</label>
-          <textarea
-            value={formData.descripcion}
-            onChange={e => handleChange('descripcion', e.target.value)}
-            required
-          />
+            <label>Descripción</label>
+            <textarea
+              value={formData.descripcion}
+              onChange={e => handleChange('descripcion', e.target.value)}
+              required
+            />
 
-          <label>Precio</label>
-          <input
-            type="number"
-            value={formData.precio}
-            onChange={e => handleChange('precio', e.target.value)}
-            required
-          />
+            <label>Precio</label>
+            <input
+              type="number"
+              value={formData.precio}
+              onChange={e => handleChange('precio', e.target.value)}
+              required
+            />
 
-          <label>Categoría</label>
-          <input
-            type="text"
-            value={formData.categoria}
-            onChange={e => handleChange('categoria', e.target.value)}
-            required
-          />
+            <label>Categoría</label>
+            <input
+              type="text"
+              value={formData.categoria}
+              onChange={e => handleChange('categoria', e.target.value)}
+              required
+            />
 
-          <label>Zona</label>
-          <input
-            type="text"
-            value={formData.zona}
-            onChange={e => handleChange('zona', e.target.value)}
-            required
-          />
+            <label>Zona</label>
+            <input
+              type="text"
+              value={formData.zona}
+              onChange={e => handleChange('zona', e.target.value)}
+              required
+            />
 
-          <label>Duración (horas)</label>
-          <input
-            type="number"
-            value={formData.duracion}
-            onChange={e => handleChange('duracion', e.target.value)}
-          />
+            <label>Duración (horas)</label>
+            <input
+              type="number"
+              value={formData.duracion}
+              onChange={e => handleChange('duracion', e.target.value)}
+            />
 
+<<<<<<< HEAD
           <fieldset className="slots-fieldset">
             <legend>Horarios Disponibles</legend>
             <input
@@ -158,8 +191,13 @@ const CreateServicePage = () => {
 
           <button type="submit" className="btn">Publicar</button>
         </form>
+=======
+            <button type="submit" className="btn">Publicar</button>
+          </form>
+        </div>
+>>>>>>> aa3f525ad2646211fc8c2499457eabb78489ce89
       </div>
-    </div>
+    </>
   );
 };
 

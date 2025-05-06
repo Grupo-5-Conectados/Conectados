@@ -1,6 +1,7 @@
 // src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { getMe } from '../utils/api';  // Cambiado de getUserById a getMe
+import Navbar from '../components/Navbar';
 import '../styles/ProfilePage.scss';
 
 const ProfilePage = () => {
@@ -17,15 +18,18 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="profile-page">
-      <h2>Mi Perfil</h2>
-      {error && <div className="alert alert--error">{error}</div>}
-      <div className="profile-info">
-        <p><strong>Nombre:</strong> {user.nombre}</p>
-        <p><strong>Correo:</strong> {user.correo}</p>
-        <p><strong>Rol:</strong> {user.rol}</p>
+    <>
+      <Navbar />
+      <div className="profile-page">
+        <h2>Mi Perfil</h2>
+        {error && <div className="alert alert--error">{error}</div>}
+        <div className="profile-info">
+          <p><strong>Nombre:</strong> {user.nombre}</p>
+          <p><strong>Correo:</strong> {user.correo}</p>
+          <p><strong>Rol:</strong> {user.rol}</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
