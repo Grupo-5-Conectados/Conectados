@@ -1,18 +1,14 @@
 // src/pages/ServiceDetailPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-<<<<<<< HEAD
 import {
   getServiceById,
   getDisponibilidadPrestador,
   createBooking
 } from '../utils/api';
 import ChatWindow from '../components/ChatWindow';
-=======
-import { getServiceById, createBooking } from '../utils/api';
-import Navbar from '../components/Navbar';  // Importa la Navbar
->>>>>>> aa3f525ad2646211fc8c2499457eabb78489ce89
 import '../styles/ServiceDetailPage.scss';
+import Navbar from '../components/Navbar';
 
 const ServiceDetailPage = () => {
   const { id } = useParams();
