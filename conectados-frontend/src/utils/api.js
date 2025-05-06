@@ -67,4 +67,29 @@ export function deleteBooking(id) {
   return api.delete(`/bookings/${id}`);
 }
 
+// Disponibilidad de un servicio (slots)
+// Crear un slot para un servicio
+export function createDisponibilidad(serviceId, data) {
+  // POST /api/servicios/:id/slots
+  return api.post(`/servicios/${serviceId}/slots`, data);
+}
+// Obtener slots disponibles
+export function getDisponibilidadPrestador(serviceId) {
+  // GET /api/servicios/:id/slots
+  return api.get(`/servicios/${serviceId}/slots`);
+}
+// Eliminar un slot
+export function deleteDisponibilidad(slotId) {
+  // DELETE /api/slots/:id
+  return api.delete(`/slots/${slotId}`);
+}
+
+// Chat
+export function getChatHistory(servicioId) {
+  return api.get(`/chats/${servicioId}`);
+}
+export function sendMessage(servicioId, toUserId, content) {
+  return api.post(`/chats/${servicioId}`, { toUserId, content });
+}
+
 export default api;

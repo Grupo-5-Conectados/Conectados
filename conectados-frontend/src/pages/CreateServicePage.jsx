@@ -1,8 +1,7 @@
 // src/pages/CreateServicePage.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createService } from '../utils/api';
+import { createService, createDisponibilidad } from '../utils/api';
 import '../styles/CreateServicePage.scss';
 
 const CreateServicePage = () => {
@@ -15,6 +14,8 @@ const CreateServicePage = () => {
     zona: '',
     duracion: ''
   });
+  const [slotDate, setSlotDate] = useState('');
+  const [newSlots, setNewSlots] = useState([]);
   const [error, setError]     = useState('');
   const [success, setSuccess] = useState('');
 
@@ -30,32 +31,48 @@ const CreateServicePage = () => {
     setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleAddSlot = () => {
+    if (!slotDate) return;
+    setNewSlots(prev => [...prev, slotDate]);
+    setSlotDate('');
+  };
+
+  const handleRemoveSlot = idx => {
+    setNewSlots(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
     setError(''); setSuccess('');
 
-    // Validaciones básicas
-    if (
-      !formData.titulo ||
-      !formData.descripcion ||
-      !formData.precio ||
-      !formData.categoria ||
-      !formData.zona
-    ) {
+    const { titulo, descripcion, precio, categoria, zona, duracion } = formData;
+    if (!titulo || !descripcion || !precio || !categoria || !zona) {
       setError('Completa todos los campos obligatorios');
+      return;
+    }
+    if (newSlots.length === 0) {
+      setError('Agrega al menos un horario disponible');
       return;
     }
 
     try {
-      await createService({
-        titulo:      formData.titulo,
-        descripcion: formData.descripcion,
-        precio:      parseFloat(formData.precio),
-        categoria:   formData.categoria,
-        zona:        formData.zona,
-        duracion:    formData.duracion ? parseInt(formData.duracion, 10) : null
+      // 1) Crear servicio
+      const res = await createService({
+        titulo,
+        descripcion,
+        precio: parseFloat(precio),
+        categoria,
+        zona,
+        duracion: duracion ? parseInt(duracion, 10) : null
       });
-      setSuccess('Servicio publicado correctamente');
+      const serviceId = res.data.data.id || res.data.id;
+
+      // 2) Crear slots de disponibilidad uno a uno
+      await Promise.all(newSlots.map(fecha_hora =>
+        createDisponibilidad(serviceId, { fecha_hora: new Date(fecha_hora).toISOString() })
+      ));
+
+      setSuccess('Servicio y horarios publicados correctamente');
       setTimeout(() => navigate('/servicios'), 1500);
     } catch (err) {
       setError(err.response?.data?.message || 'Error al publicar servicio');
@@ -116,6 +133,28 @@ const CreateServicePage = () => {
             value={formData.duracion}
             onChange={e => handleChange('duracion', e.target.value)}
           />
+
+          <fieldset className="slots-fieldset">
+            <legend>Horarios Disponibles</legend>
+            <input
+              type="datetime-local"
+              value={slotDate}
+              onChange={e => setSlotDate(e.target.value)}
+            />
+            <button type="button" className="btn btn--small" onClick={handleAddSlot}>
+              Agregar Horario
+            </button>
+            <ul className="slots-list">
+              {newSlots.map((s, idx) => (
+                <li key={idx}>
+                  {new Date(s).toLocaleString()}{' '}
+                  <button type="button" onClick={() => handleRemoveSlot(idx)}>
+                    ❌
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </fieldset>
 
           <button type="submit" className="btn">Publicar</button>
         </form>

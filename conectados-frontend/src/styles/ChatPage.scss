@@ -1,0 +1,21 @@
+/* src/styles/ChatPage.scss */
+.chat-page {
+    padding: 2rem;
+    background: #f5f5f5;
+    min-height: calc(100vh - 60px);
+  
+    h2 {
+      margin-bottom: 1rem;
+      color: #333;
+      font-size: 1.4rem;
+    }
+  
+    .alert--error {
+      background: #fdecea;
+      color: #e74c3c;
+      padding: 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+  }
+  

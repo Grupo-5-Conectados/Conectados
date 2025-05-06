@@ -1,5 +1,5 @@
 // src/App.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import AdminPanel         from './pages/AdminPanel.jsx';
@@ -14,13 +14,32 @@ import BookingListPage    from './pages/BookingListPage.jsx';
 import UserListPage       from './pages/UserListPage.jsx';
 import UserEditPage       from './pages/UserEditPage.jsx';
 import CreateUserPage     from './pages/CreateUserPage.jsx';
-import ProfilePage        from './pages/ProfilePage.jsx';  // ← Nuevo
+import ProfilePage        from './pages/ProfilePage.jsx';
+import ChatListPage       from './pages/ChatListPage.jsx';   // muestra lista de conversaciones
+import ChatPage           from './pages/ChatPage.jsx';       // ventana de chat por servicio
+import SearchServicesPage from './pages/SearchServicesPage.jsx';
 import PrivateRoute       from './components/PrivateRoute.js';
 
+import { useAuth } from './hooks/useAuth';
+import { socket, connectSocket } from './socket';
 import './styles/global.scss';
-import SearchServicesPage from './pages/SearchServicesPage.jsx';
 
 function App() {
+  const { user } = useAuth(); // Asume que tienes un hook useAuth
+
+  useEffect(() => {
+    if (user?.token) {
+      // Conectar el socket cuando el usuario está autenticado
+      connectSocket(user.token);
+    }
+
+    return () => {
+      // Limpieza al desmontar el componente
+      if (socket.connected) {
+        socket.disconnect();
+      }
+    };
+  }, [user?.token]);
   return (
     <Router>
       <Routes>
@@ -29,7 +48,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login"    element={<LoginPage />} />
 
-        {/* Perfil (usuarios logueados) */}
+        {/* Perfil (todos los logueados) */}
         <Route
           path="/perfil"
           element={
@@ -44,8 +63,31 @@ function App() {
         <Route path="/servicios"     element={<ServiceListPage />} />
         <Route path="/servicios/:id" element={<ServiceDetailPage />} />
 
-         {/* Mis Citas (solo usuarios clientes) */}
-         <Route
+        {/* Chat: lista de conversaciones */}
+        {/* Mis Mensajes (lista de chats) */}
+        <Route
+          path="/mensajes"
+          element={
+            <PrivateRoute
+              element={<ChatListPage />}
+              allowedRoles={['usuario','prestador']}
+            />
+          }
+        />
+
+        {/* Ventana de chat para un servicio concreto */}
+        <Route
+          path="/chats/:servicioId"
+          element={
+            <PrivateRoute
+              element={<ChatPage />}
+              allowedRoles={['usuario','prestador']}
+            />
+          }
+        />
+
+        {/* Mis Citas (sólo usuario) */}
+        <Route
           path="/mis-citas"
           element={
             <PrivateRoute
@@ -55,16 +97,16 @@ function App() {
           }
         />
         <Route
-        path="/buscar-servicios"
-        element={
-          <PrivateRoute
-            element={<SearchServicesPage />}
-            allowedRoles={['usuario']}
-          />
-        }
-      />
+          path="/buscar-servicios"
+          element={
+            <PrivateRoute
+              element={<SearchServicesPage />}
+              allowedRoles={['usuario']}
+            />
+          }
+        />
 
-        {/* Mi Agenda (solo prestadores) */}
+        {/* Mi Agenda (sólo prestador) */}
         <Route
           path="/agenda"
           element={
@@ -74,6 +116,7 @@ function App() {
             />
           }
         />
+
         {/* Creación / edición de servicios */}
         <Route
           path="/crear"
@@ -94,7 +137,7 @@ function App() {
           }
         />
 
-        {/* Administración de usuarios (solo admin) */}
+        {/* Administración de usuarios (sólo admin) */}
         <Route
           path="/gestion-usuarios"
           element={

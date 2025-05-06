@@ -1,12 +1,6 @@
 // models/servicio.js
 
 'use strict';
-/**
- * Modelo Servicio:
- * Representa un servicio ofrecido por un prestador.
- * - Campos en BD: id, prestadorId, titulo, descripcion, precio, categoria, zona, duracion, imagenUrl.
- * - Validaciones básicas y asociaciones.
- */
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
@@ -25,56 +19,33 @@ module.exports = (sequelize) => {
     },
     titulo: {
       type: DataTypes.STRING(150),
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: 'El título no puede estar vacío.' },
-        len: { args: [5, 150], msg: 'El título debe tener entre 5 y 150 caracteres.' }
-      }
+      allowNull: false
     },
     descripcion: {
       type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: 'La descripción no puede estar vacía.' }
-      }
+      allowNull: false
     },
     precio: {
       type: DataTypes.DECIMAL(10,2),
-      allowNull: false,
-      validate: {
-        isDecimal: { msg: 'El precio debe ser un número decimal.' },
-        min: { args: [0], msg: 'El precio no puede ser negativo.' }
-      }
+      allowNull: false
     },
     categoria: {
       type: DataTypes.STRING(50),
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: 'La categoría es obligatoria.' }
-      }
+      allowNull: false
     },
     zona: {
       type: DataTypes.STRING(100),
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: 'La zona es obligatoria.' }
-      }
+      allowNull: false
     },
     duracion: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true,
-      field: 'duracion_estimada',
-      validate: {
-        min: { args: [0], msg: 'La duración no puede ser negativa.' }
-      }
+      field: 'duracion_estimada'
     },
     imagenUrl: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'imagen_url',
-      validate: {
-        isUrl: { msg: 'La imagenUrl debe ser una URL válida.' }
-      }
+      field: 'imagen_url'
     }
   }, {
     sequelize,
@@ -86,10 +57,21 @@ module.exports = (sequelize) => {
   });
 
   Servicio.associate = (models) => {
-    // Cada servicio pertenece a un prestador (Usuario)
-    Servicio.belongsTo(models.Usuario, { foreignKey: 'prestadorId', as: 'prestador' });
-    // Un servicio puede tener muchas reservas
-    Servicio.hasMany(models.Booking,   { foreignKey: 'servicioId', as: 'bookings' });
+    // Relación con Usuario (prestador)
+    Servicio.belongsTo(models.Usuario, {
+      foreignKey: 'prestadorId',
+      as: 'prestador'
+    });
+    // **Aquí** agregamos la relación con Disponibilidad:
+    Servicio.hasMany(models.Disponibilidad, {
+      foreignKey: 'servicioId',
+      as: 'disponibilidades'
+    });
+    // Y mantenemos la relación con Booking si existe:
+    Servicio.hasMany(models.Booking, {
+      foreignKey: 'servicioId',
+      as: 'bookings'
+    });
   };
 
   return Servicio;

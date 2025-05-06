@@ -8,6 +8,12 @@ const config = require(__dirname + '/../config/sequelize.js')[env];
 
 const db = {};
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
+const Disponibilidad = require('./disponibilidad')(sequelize);
+db.Disponibilidad = Disponibilidad;
+
+const chatMessage = require('./chatMessage')(sequelize);
+db[chatMessage.name] = chatMessage;
+
 
 fs
   .readdirSync(__dirname)

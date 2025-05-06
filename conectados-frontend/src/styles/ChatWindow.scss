@@ -1,0 +1,136 @@
+// src/styles/ChatWindow.scss
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  
+    &__header {
+      padding: 12px 16px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    &__status {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+  
+      &--connected {
+        background-color: #d4edda;
+        color: #155724;
+      }
+  
+      &--disconnected {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    }
+  
+    &__error {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    &__body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
+  
+    &__empty {
+      text-align: center;
+      color: #6c757d;
+      padding: 16px;
+    }
+  
+    &__message {
+      margin-bottom: 12px;
+      max-width: 80%;
+  
+      &--sent {
+        margin-left: auto;
+      }
+  
+      &--received {
+        margin-right: auto;
+      }
+  
+      &-content {
+        padding: 8px 12px;
+        border-radius: 12px;
+        position: relative;
+      }
+  
+      &--sent &-content {
+        background-color: #007bff;
+        color: white;
+        border-bottom-right-radius: 0;
+      }
+  
+      &--received &-content {
+        background-color: #e9ecef;
+        color: #212529;
+        border-bottom-left-radius: 0;
+      }
+  
+      &-time {
+        font-size: 0.7rem;
+        opacity: 0.8;
+        margin-top: 4px;
+        text-align: right;
+      }
+    }
+  
+    &__footer {
+      display: flex;
+      padding: 12px;
+      border-top: 1px solid #ddd;
+      background-color: #f8f9fa;
+  
+      textarea {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        resize: none;
+        min-height: 40px;
+        max-height: 120px;
+        margin-right: 8px;
+  
+        &:focus {
+          outline: none;
+          border-color: #80bdff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+  
+      button {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #0069d9;
+        }
+  
+        &:disabled {
+          background-color: #6c757d;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }

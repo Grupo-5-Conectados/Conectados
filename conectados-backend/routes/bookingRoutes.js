@@ -1,6 +1,6 @@
 // routes/bookingRoutes.js
+
 const express = require('express');
-const router = express.Router();
 const { verifyToken, authorizeRoles } = require('../middleware/authMiddleware');
 const {
   createBooking,
@@ -9,23 +9,32 @@ const {
   deleteBooking
 } = require('../controllers/bookingController');
 
-// Todas las rutas /api/bookings requieren usuario autenticado
+const router = express.Router();
+
+// Todas las rutas requieren token
 router.use(verifyToken);
 
-// POST   /api/bookings     → crear reserva (usuario)
-router.post('/', createBooking);
+// Crear reserva (solo 'usuario')
+router.post(
+  '/',
+  authorizeRoles('usuario'),
+  createBooking
+);
 
-// GET    /api/bookings     → listar reservas (usuario o prestador)
-router.get('/', listBookings);
+// Listar reservas (usuario o prestador)
+router.get(
+  '/',
+  listBookings
+);
 
-// PATCH  /api/bookings/:id → confirmar/cancelar (solo prestador)
+// Confirmar/rechazar reserva (solo 'prestador')
 router.patch(
   '/:id',
   authorizeRoles('prestador'),
   updateBooking
 );
 
-// DELETE /api/bookings/:id → cancelar reserva pendiente (solo usuario)
+// Cancelar reserva pendiente (solo 'usuario')
 router.delete(
   '/:id',
   authorizeRoles('usuario'),

@@ -1,41 +1,45 @@
 // src/pages/ServiceDetailPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getServiceById, createBooking } from '../utils/api';
+import {
+  getServiceById,
+  getDisponibilidadPrestador,
+  createBooking
+} from '../utils/api';
+import ChatWindow from '../components/ChatWindow';
 import '../styles/ServiceDetailPage.scss';
 
 const ServiceDetailPage = () => {
   const { id } = useParams();
   const [service, setService] = useState(null);
+  const [slots, setSlots] = useState([]);
   const [error, setError] = useState('');
-  const [bookingDate, setBookingDate] = useState('');
   const [bookingSuccess, setBookingSuccess] = useState('');
   const [bookingError, setBookingError] = useState('');
+  const [showChat, setShowChat] = useState(false);
   const userRole = localStorage.getItem('userRole');
 
   useEffect(() => {
     getServiceById(id)
-      .then(res => {
-        const s = res.data.data || res.data;
-        setService(s);
-      })
+      .then(res => setService(res.data.data || res.data))
       .catch(err => setError(err.response?.data?.message || 'Error al cargar detalle'));
-  }, [id]);
 
-  const handleBooking = async e => {
-    e.preventDefault();
-    setBookingError('');
-    setBookingSuccess('');
-    if (!bookingDate) {
-      setBookingError('Selecciona fecha y hora');
-      return;
+    if (userRole === 'usuario') {
+      getDisponibilidadPrestador(id)
+        .then(res => setSlots(res.data.data || res.data))
+        .catch(() => {});
     }
+  }, [id, userRole]);
+
+  const handleBook = async slot => {
+    setBookingError(''); setBookingSuccess('');
     try {
       await createBooking({
         servicioId: id,
-        fecha_hora: new Date(bookingDate).toISOString()
+        fecha_hora: slot.fecha_hora
       });
       setBookingSuccess('Reserva creada. Estado pendiente.');
+      setSlots(slots.filter(s => s.id !== slot.id));
     } catch (err) {
       setBookingError(err.response?.data?.message || 'Error al crear reserva');
     }
@@ -62,18 +66,47 @@ const ServiceDetailPage = () => {
         />
       )}
 
+      {/* Botón para abrir/cerrar chat */}
       {userRole === 'usuario' && (
-        <form onSubmit={handleBooking} className="booking-form">
-          <label>Fecha y hora:</label>
-          <input
-            type="datetime-local"
-            value={bookingDate}
-            onChange={e => setBookingDate(e.target.value)}
-          />
+        <button
+          className="btn btn--chat"
+          onClick={() => setShowChat(!showChat)}
+        >
+          {showChat ? 'Cerrar Chat' : 'Chatear con prestador'}
+        </button>
+      )}
+
+      {/* Ventana de chat */}
+      {showChat && (
+        <ChatWindow
+          servicioId={service.id}
+          otherUserId={service.prestador.id}
+        />
+      )}
+
+      {userRole === 'usuario' && (
+        <section className="available-slots">
+          <h3>Horarios disponibles</h3>
           {bookingError && <div className="alert alert--error">{bookingError}</div>}
           {bookingSuccess && <div className="alert alert--success">{bookingSuccess}</div>}
-          <button type="submit" className="btn">Reservar</button>
-        </form>
+          {slots.length === 0
+            ? <p>No hay horarios disponibles.</p>
+            : (
+              <ul>
+                {slots.map(slot => (
+                  <li key={slot.id}>
+                    {new Date(slot.fecha_hora).toLocaleString()}
+                    <button
+                      onClick={() => handleBook(slot)}
+                      className="btn btn--small"
+                    >
+                      Reservar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+        </section>
       )}
     </div>
   );
