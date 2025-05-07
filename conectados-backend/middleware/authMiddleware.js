@@ -34,7 +34,7 @@ async function verifyToken(req, res, next) {
 
     // Carga mínimo info de usuario en req.user
     const user = await Usuario.findByPk(payload.id, {
-      attributes: ['id', 'correo', 'rol']
+      attributes: ['id', 'nombre','correo', 'rol']
     });
     if (!user) {
       throw { status: 401, message: 'Usuario no existe.' };
@@ -42,6 +42,7 @@ async function verifyToken(req, res, next) {
 
     req.user = {
       id: user.id,
+      nombre: user.nombre,
       correo: user.correo,
       rol: user.rol
     };
