@@ -4,7 +4,7 @@ import {
   updateBooking,
   deleteBooking
 } from '../utils/api';
-
+import NavBar from '../components/Navbar';
 import '../styles/BookingListPage.scss';
 
 const BookingListPage = () => {
@@ -55,6 +55,8 @@ const BookingListPage = () => {
   };
 
   return (
+    <>
+      <NavBar /> {/* ✅ Aquí se agrega el navbar */}
     <div className="booking-list-page">
       <h2>Mis Reservas</h2>
 
@@ -107,6 +109,7 @@ const BookingListPage = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

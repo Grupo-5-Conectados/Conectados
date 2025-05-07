@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getBookings } from '../utils/api';
 import '../styles/ChatListPage.scss';
+import NavBar from '../components/Navbar';
+
 
 const ChatListPage = () => {
   const [convs, setConvs] = useState(null);
@@ -31,6 +33,8 @@ const ChatListPage = () => {
   if (convs===null) return <div className="chat-list-page__loading">Cargando…</div>;
 
   return (
+    <>
+      <NavBar /> {/* ✅ Aquí se agrega el navbar */}
     <div className="chat-list-page">
       <h2>Mis Chats</h2>
       {convs.length === 0
@@ -60,6 +64,7 @@ const ChatListPage = () => {
           </ul>
         )}
     </div>
+  </>
   );
 };
 

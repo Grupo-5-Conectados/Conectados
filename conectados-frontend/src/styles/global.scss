@@ -11,7 +11,7 @@ body {
   background-color: #f4f4f9;
   color: #333;
   line-height: 1.6;
-  padding: 20px;
+  padding: 0px;
 }
 
 a {
@@ -22,6 +22,6 @@ a {
 /* Diseño responsivo básico */
 @media (max-width: 768px) {
   body {
-    padding: 10px;
+    padding: 0px;
   }
 }

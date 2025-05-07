@@ -1,8 +1,19 @@
 /* src/pages/ServiceDetailPage.scss */
 
 .service-detail-page {
-  padding: 2rem;
+  padding: 0;
   background: #f9f9f9;
+
+  .service-card {
+    background: #fff;
+    padding: 1rem;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 
   h2 {
     color: #2c3e50;
@@ -22,6 +33,7 @@
   }
 
   .btn--chat {
+    box-sizing: border-box;
     margin: 1rem 0;
     padding: 0.6rem 1.2rem;
     background: #8e44ad;
