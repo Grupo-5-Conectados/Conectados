@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/navbar.scss';
 
 const Navbar = () => {
   const userRole = localStorage.getItem('userRole');
   const navigate = useNavigate();
-  const location = useLocation(); // Obtenemos la ruta actual
+  const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -13,7 +14,10 @@ const Navbar = () => {
     navigate('/');
   };
 
-  // Verificamos si estamos en la página de login o registro para no mostrar los botones correspondientes
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
@@ -21,16 +25,15 @@ const Navbar = () => {
       <Link to="/" className="navbar__logo">
         Conectados
       </Link>
-      <ul className="navbar__links">
-        <li>
-          <Link to="/" className="navbar__link">Inicio</Link>
-        </li>
-        {/* El botón de Explorar ha sido eliminado */}
-        <li>
-          <Link to="/servicios" className="navbar__link">Servicios</Link>
-        </li>
 
-        {/* Condicional para no mostrar los botones de login/registro en las páginas correspondientes */}
+      <button className="navbar__toggle" onClick={toggleMenu}>
+        ☰
+      </button>
+
+      <ul className={`navbar__links ${isMenuOpen ? 'navbar__links--open' : ''}`}>
+        <li><Link to="/" className="navbar__link">Inicio</Link></li>
+        <li><Link to="/servicios" className="navbar__link">Servicios</Link></li>
+
         {!userRole && !isAuthPage && (
           <>
             <li><Link to="/register" className="navbar__link">Registrarse</Link></li>
@@ -41,7 +44,6 @@ const Navbar = () => {
         {userRole === 'admin' && (
           <>
             <li><Link to="/gestion-usuarios" className="navbar__link">Gestionar Usuarios</Link></li>
-            <li><Link to="/denuncias" className="navbar__link">Denuncias</Link></li>
             <li><Link to="/panel-admin" className="navbar__link">Panel Admin</Link></li>
           </>
         )}
