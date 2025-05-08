@@ -1,28 +1,15 @@
 /* src/pages/ServiceDetailPage.scss */
 
 .service-detail-page {
-  padding: 0;
-  background: #f9f9f9;
-
-  .service-card {
-    background: #fff;
-    padding: 1rem;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+  background: #f0f2f5;
+  min-height: 80vh;
 
   h2 {
-    color: #2c3e50;
-    margin-bottom: 1rem;
-  }
-
-  p {
-    margin: 0.5rem 0;
-    color: #555;
+    text-align: center;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      color: #2c3e50;
+      font-size: 2rem;
   }
 
   .service-detail__image {
@@ -33,9 +20,6 @@
   }
 
   .btn--chat {
-    display: inline-block;
-    width: fit-content;
-    align-self: flex-start;
     margin: 1rem 0;
     padding: 0.6rem 1.2rem;
     background: #8e44ad;

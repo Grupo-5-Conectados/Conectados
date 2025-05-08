@@ -1,13 +1,15 @@
 /* src/styles/ChatListPage.scss */
 
 .chat-list-page {
-    padding: 2rem;
-    background: #f9f9f9;
-    min-height: calc(100vh - 60px);
-  
+    background: #f0f2f5;
+    min-height: 80vh;
+
     h2 {
-      margin-bottom: 1rem;
-      color: #333;
+      text-align: center;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      color: #2c3e50;
+      font-size: 2rem;
     }
   
     &__loading {

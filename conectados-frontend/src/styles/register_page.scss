@@ -1,11 +1,11 @@
 /* src/pages/RegisterPage.scss */
-
 .register-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
   background: #f0f2f5;
+  min-height: 80vh;
+  padding: 2rem;
 
   .register-card {
     background: #fff;
