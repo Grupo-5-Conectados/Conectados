@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUsers, deleteUser } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar'; // Asegúrate de que esta ruta sea correcta
+import Navbar from '../components/Navbar';
 import '../styles/UserListPage.scss';
 
 const UserListPage = () => {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { getServiceById, getMe } from '../utils/api';
 import ChatWindow from '../components/ChatWindow';
+import Navbar from '../components/Navbar';
 import '../styles/ChatPage.scss';
 
 const ChatPage = () => {
@@ -34,6 +35,8 @@ const ChatPage = () => {
 
   return (
     <div className="chat-page">
+      <Navbar /> 
+
       <h2>Chat – {svc.titulo}</h2>
       <ChatWindow
         servicioId={svc.id}

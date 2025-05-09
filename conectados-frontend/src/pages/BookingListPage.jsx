@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import Navbar from '../components/Navbar'; 
 import {
   getBookings,
   updateBooking,
   deleteBooking
 } from '../utils/api';
-import NavBar from '../components/Navbar';
+
 import '../styles/BookingListPage.scss';
 
 const BookingListPage = () => {
@@ -21,7 +22,6 @@ const BookingListPage = () => {
     setError('');
     getBookings()
       .then(res => {
-        // data comes in res.data.data or res.data
         const data = res.data.data ?? res.data;
         setBookings(data);
       })
@@ -55,9 +55,8 @@ const BookingListPage = () => {
   };
 
   return (
-    <>
-      <NavBar /> {/* ✅ Aquí se agrega el navbar */}
     <div className="booking-list-page">
+      <Navbar /> 
       <h2>Mis Reservas</h2>
 
       {error && (
@@ -109,7 +108,6 @@ const BookingListPage = () => {
         ))}
       </div>
     </div>
-    </>
   );
 };
 
