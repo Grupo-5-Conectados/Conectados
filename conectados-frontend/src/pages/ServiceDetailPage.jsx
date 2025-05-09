@@ -50,33 +50,37 @@ const ServiceDetailPage = () => {
   if (!service) return <div>Cargando...</div>;
 
   return (
+    
     <div className="service-detail-page">
       <Navbar />  {/* Aquí insertamos la Navbar */}
-      <div className="service-card">
-        <h2>{service.titulo}</h2>
-        <p><strong>Descripción:</strong> {service.descripcion}</p>
-        <p><strong>Precio:</strong> ${service.precio}</p>
-        <p><strong>Categoría:</strong> {service.categoria}</p>
-        <p><strong>Zona:</strong> {service.zona}</p>
-        {service.duracion != null && (
-          <p><strong>Duración:</strong> {service.duracion} horas</p>
-        )}
-        {service.imagenUrl && (
-          <img
-            src={service.imagenUrl}
-            alt={service.titulo}
-            className="service-detail__image"
-          />
-        )}
-        {/* Botón para abrir/cerrar chat */}
-        {userRole === 'usuario' && (
-          <button
-            className="btn btn--chat"
-            onClick={() => setShowChat(!showChat)}
-          >
-            {showChat ? 'Cerrar Chat' : 'Chatear con prestador'}
-          </button>
-        )}
+      <div className="service-detail__container">
+      <div className="service-detail__info">
+      <h2>{service.titulo}</h2>
+      <p><strong>Descripción:</strong> {service.descripcion}</p>
+      <p><strong>Precio:</strong> ${service.precio}</p>
+      <p><strong>Categoría:</strong> {service.categoria}</p>
+      <p><strong>Zona:</strong> {service.zona}</p>
+      {service.duracion != null && (
+        <p><strong>Duración:</strong> {service.duracion} horas</p>
+      )}
+      {service.imagenUrl && (
+        <img
+          src={service.imagenUrl}
+          alt={service.titulo}
+          className="service-detail__image"
+        />
+      )}
+
+      {/* Botón para abrir/cerrar chat */}
+      {userRole === 'usuario' && (
+        <button
+          className="btn btn--chat"
+          onClick={() => setShowChat(!showChat)}
+        >
+          {showChat ? 'Cerrar Chat' : 'Chatear con prestador'}
+        </button>
+      )}
+
       {/* Ventana de chat */}
       {showChat && (
         <ChatWindow
@@ -84,33 +88,34 @@ const ServiceDetailPage = () => {
           otherUserId={service.prestador.id}
         />
       )}
-
-        {userRole === 'usuario' && (
-          <section className="available-slots">
-            <h3>Horarios disponibles</h3>
-            {bookingError && <div className="alert alert--error">{bookingError}</div>}
-            {bookingSuccess && <div className="alert alert--success">{bookingSuccess}</div>}
-            {slots.length === 0
-              ? <p>No hay horarios disponibles.</p>
-              : (
-                <ul>
-                  {slots.map(slot => (
-                    <li key={slot.id}>
-                      {new Date(slot.fecha_hora).toLocaleString()}
-                      <button
-                        onClick={() => handleBook(slot)}
-                        className="btn btn--small"
-                      >
-                        Reservar
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-          </section>
-        )}
       </div>
+
+      {userRole === 'usuario' && (
+        <div className="available-slots">
+          <h3>Horarios disponibles</h3>
+          {bookingError && <div className="alert alert--error">{bookingError}</div>}
+          {bookingSuccess && <div className="alert alert--success">{bookingSuccess}</div>}
+          {slots.length === 0
+            ? <p>No hay horarios disponibles.</p>
+            : (
+              <ul>
+                {slots.map(slot => (
+                  <li key={slot.id}>
+                    {new Date(slot.fecha_hora).toLocaleString()}
+                    <button
+                      onClick={() => handleBook(slot)}
+                      className="btn btn--small"
+                    >
+                      Reservar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+        </div>
+      )}
     </div>
+  </div>
   );
 };
 
