@@ -1,13 +1,13 @@
 /* src/pages/SearchServicesPage.scss */
 .search-services-page {
-    background: #f0f2f5;
-    min-height: 80vh;
+    background: linear-gradient(135deg, #3498db 0%, #2ecc71 100%);
+    min-height: 100vh;
   
     h2 {
       text-align: center;
       margin-top: 2rem;
       margin-bottom: 2rem;
-      color: #2c3e50;
+      color: #fff;
       font-size: 2rem;
     }
   
@@ -43,6 +43,7 @@
     }
   
     .results-grid {
+      padding: 2rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
