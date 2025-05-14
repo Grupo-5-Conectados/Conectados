@@ -49,7 +49,9 @@ cd backend
 npm install
 npm start                         # arranca en http://localhost:4000
 ```
-Se debe tener previamente creada la base de datos a usar, las tablas se generan automaticamente despues de iniciar.
+Si no funciona iniciar con npm run dev.
+
+Se debe tener previamente creada la base de datos a usar, es decir se debe tener previamente instalado mysql con datos previos creados en el .env, todavia no configuramos para que funcione en la nube la base de datos las tablas se generan automaticamente despues de iniciar.
 
 ### 1.6 Estructura de carpetas
 
@@ -189,3 +191,18 @@ frontend/
 - Valentina Lepin   
 - Manuel Vargas
 - Claudio Villagrán
+
+## Evidencia
+
+Conección Jira con Slack
+![SlackJira](https://github.com/user-attachments/assets/9ad6a2f5-807d-41fe-9d6b-d80fcdde4304)
+
+Conección Github con Slack
+![SlackGit](https://github.com/user-attachments/assets/2b5d2b6f-c2d1-49d6-a708-886634325d0f)
+
+Utilización de Jira
+![Jira](https://github.com/user-attachments/assets/b8c06bcf-8df5-44ce-9b1e-79138100e14d)
+
+
+
+
