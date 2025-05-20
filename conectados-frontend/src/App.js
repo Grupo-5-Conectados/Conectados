@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+import AboutPage           from './pages/AboutPage.jsx';
 import AdminPanel         from './pages/AdminPanel.jsx';
 import Home               from './pages/Home.jsx';
 import RegisterPage       from './pages/RegisterPage.jsx';
@@ -47,6 +48,7 @@ function App() {
         <Route path="/"         element={<Home />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login"    element={<LoginPage />} />
+        <Route path="/about"    element={<AboutPage />} />
 
         {/* Perfil (todos los logueados) */}
         <Route
