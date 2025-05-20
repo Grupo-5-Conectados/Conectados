@@ -1,24 +1,35 @@
 
   /* src/pages/BookingListPage.scss */
 .booking-list-page {
-  background: linear-gradient(135deg, #3498db 0%, #2ecc71 100%);
+  background: #f0f2f5;
   min-height: 100vh;
 
+  .Title {
+      background: linear-gradient(135deg, #3498db 0%, #2ecc71 100%);
+      text-align: center;
+      padding: 1rem;
+  } 
+
   h2 {
-    text-align: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    color: #fff;
-    font-size: 2rem;
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      color: #fff;
+      font-size: 2rem;
+  }
+
+  .Body{
+      min-height: 470px;
   }
   
-
   .booking-list {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     max-width: 900px;
     margin: 0 auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
   .booking-card {
