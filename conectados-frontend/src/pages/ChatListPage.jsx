@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { getBookings } from '../utils/api';
 import '../styles/ChatListPage.scss';
 
@@ -33,8 +34,9 @@ const ChatListPage = () => {
   return (
     <div className="chat-list-page">
       <Navbar /> 
-
+      <div className = "Title">
       <h2>Mis Chats</h2>
+      </div>
       {convs.length === 0 ? (
         <p>No tienes conversaciones abiertas.</p>
       ) : (
@@ -60,6 +62,7 @@ const ChatListPage = () => {
           ))}
         </ul>
       )}
+      <Footer />
     </div>
   );
 };

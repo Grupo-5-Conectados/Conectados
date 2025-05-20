@@ -1,7 +1,8 @@
 // src/pages/SearchServicesPage.jsx
 import React, { useEffect, useState } from 'react';
 import { getServices } from '../utils/api';
-import Navbar from '../components/Navbar';  // Importa la Navbar
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import '../styles/SearchServicesPage.scss';
 
 const SearchServicesPage = () => {
@@ -31,8 +32,10 @@ const SearchServicesPage = () => {
   return (
     <div className="search-services-page">
       <Navbar /> {/* Inserta la Navbar aquí */}
+      <div className="Title">
       <h2>Buscar Servicios</h2>
       {error && <div className="alert alert--error">{error}</div>}
+      
 
       <div className="filters">
         <input
@@ -57,7 +60,8 @@ const SearchServicesPage = () => {
           onChange={e => setZonaFilter(e.target.value)}
         />
       </div>
-
+</div>
+      <div className="Body"> 
       <div className="results-grid">
         {filtered.map(s => (
           <div key={s.id} className="service-card">
@@ -73,6 +77,8 @@ const SearchServicesPage = () => {
         ))}
         {filtered.length === 0 && <p className="no-results">No se encontraron servicios.</p>}
       </div>
+      </div>
+      <Footer/>
     </div>
   );
 };

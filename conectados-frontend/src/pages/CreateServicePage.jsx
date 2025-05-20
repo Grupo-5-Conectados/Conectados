@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { createService, createDisponibilidad } from '../utils/api';
 import '../styles/CreateServicePage.scss';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+
 const CreateServicePage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -16,8 +18,7 @@ const CreateServicePage = () => {
   });
   const [slotDate, setSlotDate] = useState('');
   const [newSlots, setNewSlots] = useState([]);
-  const [error, setError]     = useState('');
-
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
@@ -47,8 +48,8 @@ const CreateServicePage = () => {
     setError('');
     setSuccess('');
     const { titulo, descripcion, precio, categoria, zona, duracion } = formData;
-    if (!titulo || !descripcion || !precio || !categoria || !zona) {
 
+    if (!titulo || !descripcion || !precio || !categoria || !zona) {
       setError('Completa todos los campos obligatorios');
       return;
     }
@@ -58,7 +59,6 @@ const CreateServicePage = () => {
     }
 
     try {
-      // 1) Crear servicio
       const res = await createService({
         titulo,
         descripcion,
@@ -66,11 +66,10 @@ const CreateServicePage = () => {
         categoria,
         zona,
         duracion: duracion ? parseInt(duracion, 10) : null
-
       });
+
       const serviceId = res.data.data.id || res.data.id;
 
-      // 2) Crear slots de disponibilidad uno a uno
       await Promise.all(newSlots.map(fecha_hora =>
         createDisponibilidad(serviceId, { fecha_hora: new Date(fecha_hora).toISOString() })
       ));
@@ -85,86 +84,95 @@ const CreateServicePage = () => {
   return (
     <>
       <Navbar />
-      <div className="create-service-page">
-        <div className="service-card">
+      <div className="Title">
           <h2>Publicar Servicio</h2>
-
+      </div>
+      <div className="create-service-page">
+        
+        <div className="service-card">
           {error && <div className="alert alert--error">{error}</div>}
           {success && <div className="alert alert--success">{success}</div>}
 
           <form onSubmit={handleSubmit}>
-            <label>Título</label>
-            <input
-              type="text"
-              value={formData.titulo}
-              onChange={e => handleChange('titulo', e.target.value)}
-              required
-            />
+  <div className="form-columns">
+    <div className="column">
+              <label>Título</label>
+              <input
+                type="text"
+                value={formData.titulo}
+                onChange={e => handleChange('titulo', e.target.value)}
+                required
+              />
 
-            <label>Descripción</label>
-            <textarea
-              value={formData.descripcion}
-              onChange={e => handleChange('descripcion', e.target.value)}
-              required
-            />
+              <label>Descripción</label>
+              <textarea
+                value={formData.descripcion}
+                onChange={e => handleChange('descripcion', e.target.value)}
+                required
+              />
 
-            <label>Precio</label>
-            <input
-              type="number"
-              value={formData.precio}
-              onChange={e => handleChange('precio', e.target.value)}
-              required
-            />
+              <label>Precio</label>
+              <input
+                type="number"
+                value={formData.precio}
+                onChange={e => handleChange('precio', e.target.value)}
+                required
+              />
 
-            <label>Categoría</label>
-            <input
-              type="text"
-              value={formData.categoria}
-              onChange={e => handleChange('categoria', e.target.value)}
-              required
-            />
+              <label>Categoría</label>
+              <input
+                type="text"
+                value={formData.categoria}
+                onChange={e => handleChange('categoria', e.target.value)}
+                required
+              />
+            </div>
 
-            <label>Zona</label>
-            <input
-              type="text"
-              value={formData.zona}
-              onChange={e => handleChange('zona', e.target.value)}
-              required
-            />
+            <div className="column">
+              <label>Zona</label>
+              <input
+                type="text"
+                value={formData.zona}
+                onChange={e => handleChange('zona', e.target.value)}
+                required
+              />
 
-            <label>Duración (horas)</label>
-            <input
-              type="number"
-              value={formData.duracion}
-              onChange={e => handleChange('duracion', e.target.value)}
-            />
+              <label>Duración (horas)</label>
+              <input
+                type="number"
+                value={formData.duracion}
+                onChange={e => handleChange('duracion', e.target.value)}
+              />
 
-          <fieldset className="slots-fieldset">
-            <legend>Horarios Disponibles</legend>
-            <input
-              type="datetime-local"
-              value={slotDate}
-              onChange={e => setSlotDate(e.target.value)}
-            />
-            <button type="button" className="btn btn--small" onClick={handleAddSlot}>
-              Agregar Horario
-            </button>
-            <ul className="slots-list">
-              {newSlots.map((s, idx) => (
-                <li key={idx}>
-                  {new Date(s).toLocaleString()}{' '}
-                  <button type="button" onClick={() => handleRemoveSlot(idx)}>
-                    ❌
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </fieldset>
+              <fieldset className="slots-fieldset"> 
+  <legend>Horarios Disponibles</legend>
+  <input
+    type="datetime-local"
+    value={slotDate}
+    onChange={e => setSlotDate(e.target.value)}
+  />
+  <button type="button" className="btn btn--small" onClick={handleAddSlot}>
+    Agregar Horario
+  </button>
+  <ul className="slots-list">
+    {newSlots.map((s, idx) => (
+      <li key={idx}>
+        <span>{new Date(s).toLocaleString()}</span>
+        <button type="button" onClick={() => handleRemoveSlot(idx)}>❌</button>
+      </li>
+    ))}
+  </ul>
+</fieldset>
 
-          <button type="submit" className="btn">Publicar</button>
-        </form>
+            </div>
+            </div>
+            <div className="button">
+            <button type="submit" className="btn">Publicar</button>
+            </div>
+          </form>
+        </div>
       </div>
-      </div>
+      <Footer />
     </>
   );
 };

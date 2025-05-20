@@ -4,7 +4,9 @@ import { useParams, useLocation } from 'react-router-dom';
 import { getServiceById, getMe } from '../utils/api';
 import ChatWindow from '../components/ChatWindow';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import '../styles/ChatPage.scss';
+
 
 const ChatPage = () => {
   const { servicioId } = useParams();
@@ -36,12 +38,16 @@ const ChatPage = () => {
   return (
     <div className="chat-page">
       <Navbar /> 
-
+      <div className="Title">
       <h2>Chat – {svc.titulo}</h2>
+      </div>
+      <div className="Body">
       <ChatWindow
         servicioId={svc.id}
         otherUserId={otherUserId}
       />
+      </div>
+      <Footer />
     </div>
   );
 };

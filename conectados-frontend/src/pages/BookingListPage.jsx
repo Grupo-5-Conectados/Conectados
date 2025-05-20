@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar'; 
+import Footer from '../components/Footer';
 import {
   getBookings,
   updateBooking,
@@ -57,8 +58,9 @@ const BookingListPage = () => {
   return (
     <div className="booking-list-page">
       <Navbar /> 
+      <div className="Title">
       <h2>Mis Reservas</h2>
-
+      </div>
       {error && (
         <div className="alert alert--error">
           {error}
@@ -70,7 +72,7 @@ const BookingListPage = () => {
           {feedback}
         </div>
       )}
-
+      <div className="Body"> 
       <div className="booking-list">
         {bookings.map(b => (
           <div key={b.id} className="booking-card">
@@ -107,6 +109,8 @@ const BookingListPage = () => {
           </div>
         ))}
       </div>
+      </div>
+      <Footer />
     </div>
   );
 };

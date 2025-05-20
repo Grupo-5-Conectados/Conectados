@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 import React from 'react';
 import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
 import '../styles/Home.scss';
 
 const Home = () => {
@@ -30,6 +31,7 @@ const Home = () => {
           </div>
         ))}
       </div>
+      <Footer />
     </div>
   );
 };

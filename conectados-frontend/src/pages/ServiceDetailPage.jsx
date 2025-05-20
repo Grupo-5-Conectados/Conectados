@@ -9,6 +9,7 @@ import {
 import ChatWindow from '../components/ChatWindow';
 import '../styles/ServiceDetailPage.scss';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const ServiceDetailPage = () => {
   const { id } = useParams();
@@ -18,14 +19,14 @@ const ServiceDetailPage = () => {
   const [bookingSuccess, setBookingSuccess] = useState('');
   const [bookingError, setBookingError] = useState('');
   const [showChat, setShowChat] = useState(false);
-  const userRole = localStorage.getItem('userRole');
+  const userRole = localStorage.getItem('userRole'); // 'usuario', 'prestador', 'admin' o null
 
   useEffect(() => {
     getServiceById(id)
       .then(res => setService(res.data.data || res.data))
       .catch(err => setError(err.response?.data?.message || 'Error al cargar detalle'));
 
-    if (userRole === 'usuario') {
+    if (userRole) {
       getDisponibilidadPrestador(id)
         .then(res => setSlots(res.data.data || res.data))
         .catch(() => {});
@@ -33,7 +34,8 @@ const ServiceDetailPage = () => {
   }, [id, userRole]);
 
   const handleBook = async slot => {
-    setBookingError(''); setBookingSuccess('');
+    setBookingError('');
+    setBookingSuccess('');
     try {
       await createBooking({
         servicioId: id,
@@ -50,72 +52,87 @@ const ServiceDetailPage = () => {
   if (!service) return <div>Cargando...</div>;
 
   return (
-    
     <div className="service-detail-page">
-      <Navbar />  {/* Aquí insertamos la Navbar */}
-      <div className="service-detail__container">
-      <div className="service-detail__info">
-      <h2>{service.titulo}</h2>
-      <p><strong>Descripción:</strong> {service.descripcion}</p>
-      <p><strong>Precio:</strong> ${service.precio}</p>
-      <p><strong>Categoría:</strong> {service.categoria}</p>
-      <p><strong>Zona:</strong> {service.zona}</p>
-      {service.duracion != null && (
-        <p><strong>Duración:</strong> {service.duracion} horas</p>
-      )}
-      {service.imagenUrl && (
-        <img
-          src={service.imagenUrl}
-          alt={service.titulo}
-          className="service-detail__image"
-        />
-      )}
+      <Navbar />
+      <div className="Body">
+        <div className="service-detail__container">
+          <div className="service-detail__info">
+            <h2>{service.titulo}</h2>
+            <p><strong>Descripción:</strong> {service.descripcion}</p>
+            <p><strong>Precio:</strong> ${service.precio}</p>
+            <p><strong>Categoría:</strong> {service.categoria}</p>
+            <p><strong>Zona:</strong> {service.zona}</p>
+            {service.duracion != null && (
+              <p><strong>Duración:</strong> {service.duracion} horas</p>
+            )}
+            {service.imagenUrl && (
+              <img
+                src={service.imagenUrl}
+                alt={service.titulo}
+                className="service-detail__image"
+              />
+            )}
 
-      {/* Botón para abrir/cerrar chat */}
-      {userRole === 'usuario' && (
-        <button
-          className="btn btn--chat"
-          onClick={() => setShowChat(!showChat)}
-        >
-          {showChat ? 'Cerrar Chat' : 'Chatear con prestador'}
-        </button>
-      )}
+            {/* Botón para abrir/cerrar chat */}
+            {userRole === 'usuario' && (
+              <button
+                className="btn btn--chat"
+                onClick={() => setShowChat(!showChat)}
+              >
+                {showChat ? 'Cerrar Chat' : 'Chatear con prestador'}
+              </button>
+            )}
 
-      {/* Ventana de chat */}
-      {showChat && (
-        <ChatWindow
-          servicioId={service.id}
-          otherUserId={service.prestador.id}
-        />
-      )}
-      </div>
+            {/* Ventana de chat */}
+            {showChat && (
+              <ChatWindow
+                servicioId={service.id}
+                otherUserId={service.prestador.id}
+              />
+            )}
+          </div>
 
-      {userRole === 'usuario' && (
-        <div className="available-slots">
-          <h3>Horarios disponibles</h3>
-          {bookingError && <div className="alert alert--error">{bookingError}</div>}
-          {bookingSuccess && <div className="alert alert--success">{bookingSuccess}</div>}
-          {slots.length === 0
-            ? <p>No hay horarios disponibles.</p>
-            : (
+          <div className="available-slots">
+            <h3>Horarios disponibles</h3>
+
+            {!userRole && (
+              <p>Inicia sesión para ver los horarios disponibles.</p>
+            )}
+
+            {userRole && slots.length === 0 && (
+              <p>No hay horarios disponibles.</p>
+            )}
+
+            {userRole && slots.length > 0 && (
               <ul>
                 {slots.map(slot => (
                   <li key={slot.id}>
                     {new Date(slot.fecha_hora).toLocaleString()}
-                    <button
-                      onClick={() => handleBook(slot)}
-                      className="btn btn--small"
-                    >
-                      Reservar
-                    </button>
+                    {userRole === 'usuario' && (
+                      <button
+                        onClick={() => handleBook(slot)}
+                        className="btn btn--small"
+                      >
+                        Reservar
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
             )}
+
+            {userRole === 'usuario' && bookingError && (
+              <div className="alert alert--error">{bookingError}</div>
+            )}
+            {userRole === 'usuario' && bookingSuccess && (
+              <div className="alert alert--success">{bookingSuccess}</div>
+            )}
+          </div>
+          
         </div>
-      )}
+      </div>
+      <Footer />
     </div>
-  </div>
   );
 };
 
