@@ -43,12 +43,12 @@ module.exports = (sequelize) => {
       }
     },
     estado: {
-      type: DataTypes.ENUM('pendiente','confirmada','cancelada'),
+      type: DataTypes.ENUM('pendiente','confirmada','cancelada','realizada'),
       allowNull: false,
       defaultValue: 'pendiente',
       validate: {
         isIn: {
-          args: [['pendiente','confirmada','cancelada']],
+          args: [['pendiente','confirmada','cancelada','realizada']],
           msg: 'Estado inválido.'
         }
       }

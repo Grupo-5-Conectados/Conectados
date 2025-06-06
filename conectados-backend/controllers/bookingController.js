@@ -7,7 +7,7 @@ const { Booking, Servicio, Usuario, Disponibilidad } = require('../models');
  * Crear una reserva (solo usuario)
  */
 exports.createBooking = async (req, res) => {
-  const usuarioId   = req.user.id;
+  const usuarioId = req.user.id;
   const { servicioId, fecha_hora } = req.body;
 
   if (!servicioId || !fecha_hora) {
@@ -105,38 +105,49 @@ exports.listBookings = async (req, res) => {
 
 /**
  * PATCH /api/bookings/:id
- * Confirmar/cancelar reserva (solo prestador dueño del servicio)
+ * Confirmar/cancelar/marcar como realizada (solo prestador dueño del servicio)
  */
 exports.updateBooking = async (req, res) => {
-  const bookingId = parseInt(req.params.id, 10);
+  const { id } = req.params;
   const { estado } = req.body;
-  const validos = ['confirmada', 'cancelada'];
-
-  if (!validos.includes(estado)) {
-    return res.status(400).json({ code: 400, message: 'Estado inválido.' });
-  }
+  const usuarioId = req.user.id;
 
   try {
-    const booking = await Booking.findByPk(bookingId, {
-      include: { model: Servicio, as: 'servicio', attributes: ['prestadorId'] }
+    const reserva = await Booking.findByPk(id, {
+      include: {
+        model: Servicio,
+        as: 'servicio'
+      }
     });
-    if (!booking) {
-      return res.status(404).json({ code: 404, message: 'Reserva no existe.' });
-    }
-    if (req.user.rol !== 'prestador' || booking.servicio.prestadorId !== req.user.id) {
-      return res.status(403).json({ code: 403, message: 'No autorizado.' });
+
+    if (!reserva) {
+      return res.status(404).json({ message: 'Reserva no encontrada' });
     }
 
-    booking.estado = estado;
-    await booking.save();
-    return res.status(200).json({ code: 200, data: booking });
-  } catch (error) {
-    console.error('Error en updateBooking:', error);
-    return res.status(500).json({
-      code: 500,
-      message: 'Error al actualizar reserva.',
-      details: error.message
-    });
+    // Validar que el usuario sea el dueño del servicio
+    if (req.user.rol !== 'prestador' || reserva.servicio.prestadorId !== usuarioId) {
+      return res.status(403).json({ message: 'No autorizado para modificar esta reserva' });
+    }
+
+    // Validar transiciones permitidas
+    const transicionesValidas = {
+      pendiente: ['confirmada', 'cancelada'],
+      confirmada: ['realizada', 'cancelada'],
+      realizada: [],
+      cancelada: []
+    };
+
+    if (!transicionesValidas[reserva.estado]?.includes(estado)) {
+      return res.status(400).json({ message: `No se puede pasar de '${reserva.estado}' a '${estado}'` });
+    }
+
+    reserva.estado = estado;
+    await reserva.save();
+    res.json(reserva);
+
+  } catch (err) {
+    console.error('Error en updateBooking:', err);
+    res.status(500).json({ message: 'Error al actualizar la reserva', error: err.message });
   }
 };
 
@@ -152,9 +163,11 @@ exports.deleteBooking = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ code: 404, message: 'Reserva no existe.' });
     }
+
     if (req.user.rol !== 'usuario' || booking.usuarioId !== req.user.id) {
       return res.status(403).json({ code: 403, message: 'No autorizado.' });
     }
+
     if (booking.estado !== 'pendiente') {
       return res.status(400).json({ code: 400, message: 'Solo reservas pendientes pueden cancelarse.' });
     }
