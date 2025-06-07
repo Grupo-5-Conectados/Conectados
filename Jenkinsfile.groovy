@@ -2,17 +2,22 @@ pipeline {
   agent any
 
   tools {
-    nodejs 'NodeJS_18' // Asegúrate de que esté definido en Jenkins (Manage Jenkins > Tools)
+    nodejs 'NodeJS_18'
   }
 
   environment {
+    // Variables backend
     CI = 'true'
-    PORT=4000
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=password
-    DB_NAME=conectados
-    JWT_SECRET=UnaClaveSegura
+    PORT = '4000'
+    DB_HOST = 'localhost'
+    DB_USER = 'root'
+    DB_PASSWORD = 'password'
+    DB_NAME = 'conectados'
+    JWT_SECRET = 'UnaClaveSegura'
+
+    // Variables frontend (React)
+    REACT_APP_API_URL = 'http://localhost:4000/api'
+    REACT_APP_SOCKET_URL = 'http://localhost:4000'
   }
 
   stages {
@@ -25,39 +30,33 @@ pipeline {
     stage('Instalar dependencias') {
       steps {
         sh 'npm install'
-        sh 'npm run install:browsers'
+        sh 'npx playwright install'
       }
     }
 
-    stage('Iniciar backend') {
+    stage('Levantar Backend') {
       steps {
-        dir('backend') {
-          sh 'nohup npm start &'
-        }
+        sh 'nohup npm run start &'
+        sleep 5
       }
     }
 
-    stage('Iniciar frontend') {
+    stage('Levantar Frontend') {
       steps {
         dir('frontend') {
           sh 'nohup npm start &'
         }
-      }
-    }
-
-    stage('Esperar servidores') {
-      steps {
-        sh 'sleep 10'
+        sleep 10
       }
     }
 
     stage('Ejecutar pruebas E2E (Playwright)') {
       steps {
-        sh 'npm run test:e2e'
+        sh 'npx playwright test --reporter=html'
       }
     }
 
-    stage('Publicar resultados Playwright') {
+    stage('Publicar reporte HTML de Playwright') {
       steps {
         publishHTML(target: [
           reportDir: 'playwright-report',
@@ -73,7 +72,7 @@ pipeline {
   post {
     always {
       archiveArtifacts artifacts: '**/playwright-report/**', allowEmptyArchive: true
-      junit '**/test-results/**/*.xml'
+      junit '**/test-results/**/*.xml', allowEmptyArchive: true
     }
   }
 }
