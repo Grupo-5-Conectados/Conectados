@@ -14,10 +14,6 @@ pipeline {
     DB_PASSWORD = 'password'
     DB_NAME = 'conectados'
     JWT_SECRET = 'UnaClaveSegura'
-
-    // Variables frontend (React)
-    REACT_APP_API_URL = 'http://localhost:4000/api'
-    REACT_APP_SOCKET_URL = 'http://localhost:4000'
   }
 
   stages {
@@ -27,21 +23,33 @@ pipeline {
       }
     }
 
-    stage('Instalar dependencias') {
+    stage('Instalar dependencias backend') {
       steps {
         sh 'npm install'
         sh 'npx playwright install'
       }
     }
 
-    stage('Levantar Backend') {
+    stage('Instalar dependencias frontend') {
+      steps {
+        dir('frontend') {
+          sh 'npm install'
+        }
+      }
+    }
+
+    stage('Levantar backend') {
       steps {
         sh 'nohup npm run start &'
         sleep 5
       }
     }
 
-    stage('Levantar Frontend') {
+    stage('Levantar frontend') {
+      environment {
+        REACT_APP_API_URL = 'http://localhost:4000/api'
+        REACT_APP_SOCKET_URL = 'http://localhost:4000'
+      }
       steps {
         dir('frontend') {
           sh 'nohup npm start &'
@@ -69,10 +77,10 @@ pipeline {
     }
   }
 
-  post {
-    always {
-      archiveArtifacts artifacts: '**/playwright-report/**', allowEmptyArchive: true
-      junit '**/test-results/**/*.xml', allowEmptyArchive: true
+ post {
+  always {
+    archiveArtifacts artifacts: '**/playwright-report/**', allowEmptyArchive: true
+    junit testResults: '**/test-results/**/*.xml', allowEmptyResults: true
+        }
     }
-  }
 }
