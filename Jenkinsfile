@@ -19,7 +19,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/Grupo-5-Conectados/Conectados.git'
+        git branch: 'main', url: 'https://github.com/Grupo-5-Conectados/Conectados.git'
       }
     }
 
@@ -77,10 +77,10 @@ pipeline {
     }
   }
 
- post {
-  always {
-    archiveArtifacts artifacts: '**/playwright-report/**', allowEmptyArchive: true
-    junit testResults: '**/test-results/**/*.xml', allowEmptyResults: true
-        }
+  post {
+    always {
+      archiveArtifacts artifacts: '**/playwright-report/**', allowEmptyArchive: true
+      junit testResults: '**/test-results/**/*.xml', allowEmptyResults: true
     }
+  }
 }
