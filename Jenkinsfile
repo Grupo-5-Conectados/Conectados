@@ -32,7 +32,7 @@ pipeline {
 
     stage('Instalar dependencias frontend') {
       steps {
-        dir('frontend') {
+        dir('conectados-frontend') {
           sh 'npm install'
         }
       }
@@ -51,12 +51,12 @@ pipeline {
         REACT_APP_SOCKET_URL = 'http://localhost:4000'
       }
       steps {
-        dir('frontend') {
+        dir('conectados-frontend') {
           sh 'nohup npm start &'
         }
-        sleep 10
+        sleep time: 10, unit: 'SECONDS'
+        }
       }
-    }
 
     stage('Ejecutar pruebas E2E (Playwright)') {
       steps {
