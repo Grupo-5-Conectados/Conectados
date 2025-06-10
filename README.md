@@ -194,15 +194,20 @@ frontend/
 
 ## Evidencia
 
-Conección Jira con Slack
+Conexión Jira con Slack
 ![SlackJira](https://github.com/user-attachments/assets/9ad6a2f5-807d-41fe-9d6b-d80fcdde4304)
 
-Conección Github con Slack
+Conexión Github con Slack
 ![SlackGit](https://github.com/user-attachments/assets/2b5d2b6f-c2d1-49d6-a708-886634325d0f)
 
 Utilización de Jira
 ![Jira](https://github.com/user-attachments/assets/b8c06bcf-8df5-44ce-9b1e-79138100e14d)
 
+## Integración Continua y Despliegue Continuo (CI/CD)
 
+Este proyecto incorpora Jenkins como herramienta principal de CI/CD para automatizar el proceso de integración, pruebas y despliegue de la aplicación.
 
+## Nuevas funcionalidades
 
+- **Reviews de Servicios**: Los usuarios pueden dejar una reseña con comentario y calificación sobre cualquier servicio publicado. Esto permite mejorar la confianza y visibilidad de los prestadores.
+- **Notificaciones**: El sistema ahora envía notificaciones a prestadores y clientes, cuando se realizan reservas o reciben mensajes.
