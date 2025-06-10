@@ -1,5 +1,5 @@
 // controllers/chatController.js
-const { ChatMessage } = require('../models');
+const { ChatMessage, Notificacion } = require('../models');
 
 exports.getChatHistory = async (req, res) => {
   try {
@@ -32,6 +32,13 @@ exports.sendMessage = async (req, res) => {
       toUserId, 
       content 
     });
+
+    await Notificacion.create({
+      usuarioId: toUserId,
+      tipo: 'mensaje',
+      mensaje: 'Tienes un nuevo mensaje en el chat.'
+    });
+
 
     // Cargar relaciones para emitir el mensaje completo
     const fullMsg = await ChatMessage.findByPk(msg.id, {

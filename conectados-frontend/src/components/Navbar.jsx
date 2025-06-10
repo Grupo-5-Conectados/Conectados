@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/navbar.scss';
 
@@ -7,6 +8,46 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notificaciones, setNotificaciones] = useState([]);
+  const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
+
+  const marcarComoLeida = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      // Llama a la API que ya creaste en el backend (PUT /api/notificaciones/:id/leida)
+      await axios.put(`http://localhost:4000/api/notificaciones/${id}/leida`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      // Actualiza el estado local quitando esa notificación
+      setNotificaciones(prev => prev.filter(n => n.id !== id));
+    } catch (err) {
+      console.error('Error al marcar como leída:', err);
+    }
+  };
+
+  useEffect(() => {
+  const fetchNotificaciones = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId'); // Asegúrate de guardar esto al loguear
+      if (!userId || !token) return;
+
+      const res = await axios.get(`http://localhost:4000/api/notificaciones/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      // Solo muestra las no leídas
+      setNotificaciones(res.data.filter(n => !n.leido));
+    } catch (err) {
+      console.error('Error al obtener notificaciones:', err);
+    }
+  };
+  
+  fetchNotificaciones();
+}, []);
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -64,6 +105,35 @@ const Navbar = () => {
             <li><Link to="/mensajes" className="navbar__link">Mensajes</Link></li>
             <li><Link to="/perfil" className="navbar__link">Mi Perfil</Link></li>
           </>
+        )}
+
+        {userRole && (
+          <li className="navbar__notificaciones">
+            <button onClick={() => setMostrarNotificaciones(!mostrarNotificaciones)}>
+              🔔
+              {notificaciones.length > 0 && (
+                <span className="navbar__badge">{notificaciones.length}</span>
+              )}
+            </button>
+            {mostrarNotificaciones && (
+              <ul className="navbar__dropdown">
+                {notificaciones.length === 0 ? (
+                  <li>No hay notificaciones</li>
+                ) : (
+                  notificaciones.map((n) => (
+                    <li
+                      key={n.id}
+                      onClick={() => marcarComoLeida(n.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {n.mensaje}
+                    </li>
+                  ))
+
+                )}
+              </ul>
+            )}
+          </li>
         )}
 
         {userRole && (

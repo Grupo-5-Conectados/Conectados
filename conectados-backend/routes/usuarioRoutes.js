@@ -9,29 +9,21 @@ const {
   getUsuarioById,
   updateMe,
   updateUsuario,
-  deleteUsuario
+  deleteUsuario,
+  getMisReviews
 } = require('../controllers/usuarioController');
 
-// Rutas públicas (no requieren autenticación)
-// router.post('/register', register); // Si tienes registro público
-
-// Rutas que requieren autenticación pero no necesariamente ser admin
-router.get('/me', verifyToken, getMe); // Mover esta ruta antes del middleware de admin
-router.put('/me', validarUsuario, verifyToken, updateMe); // Para actualizar el propio perfil
-
-// Rutas que requieren ser admin (se aplica el middleware a todas las siguientes)
+// Rutas que requieren autenticación
+router.get('/me', verifyToken, getMe);
+router.put('/me', validarUsuario, verifyToken, updateMe);
+router.get('/mis-reviews', verifyToken, getMisReviews); 
+// Rutas solo para admin
 router.use(verifyToken, authorizeRoles('admin'));
-
-// GET    /api/usuarios         → listar todos (solo admin)
 router.get('/', getUsuarios);
-
-// GET    /api/usuarios/:id     → ver usuario por ID (solo admin)
 router.get('/:id', getUsuarioById);
-
-// PUT    /api/usuarios/:id     → actualizar usuario (solo admin)
 router.put('/:id', validarUsuario, updateUsuario);
-
-// DELETE /api/usuarios/:id     → eliminar usuario (solo admin)
 router.delete('/:id', deleteUsuario);
+
+
 
 module.exports = router;

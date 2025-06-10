@@ -14,6 +14,10 @@ db.Disponibilidad = Disponibilidad;
 const chatMessage = require('./chatMessage')(sequelize);
 db[chatMessage.name] = chatMessage;
 
+const notificacion = require('./notificacion')(sequelize);
+db[notificacion.name] = notificacion;
+
+
 
 fs
   .readdirSync(__dirname)

@@ -6,6 +6,7 @@ const helmet  = require('helmet');
 const morgan  = require('morgan');
 
 const { sequelize } = require('./models');
+
 const authRoutes           = require('./routes/authRoutes');
 const servicioRoutes       = require('./routes/servicioRoutes');
 const bookingRoutes        = require('./routes/bookingRoutes');
@@ -14,7 +15,8 @@ const adminRoutes          = require('./routes/adminRoutes');
 const disponibilidadRoutes = require('./routes/disponibilidadRoutes');
 const chatRoutes           = require('./routes/chatRoutes');
 const errorHandler         = require('./middleware/errorHandler');
-
+const notificacionesRoutes  = require('./routes/notificacionesRoutes');
+const reviewRoutes         = require('./routes/reviewRoutes');
 const app = express();
 
 // 1) Seguridad y logging
@@ -37,6 +39,8 @@ app.use('/api/usuarios',      usuarioRoutes);
 app.use('/api/admin',         adminRoutes);
 app.use('/api', disponibilidadRoutes);
 app.use('/api/chats',         chatRoutes);
+app.use('/api/notificaciones', notificacionesRoutes);
+app.use('/api/reviews',      reviewRoutes);
 
 // 4) Health-check
 app.get('/', (req, res) => res.send('API Conectados funcionando 👋'));

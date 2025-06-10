@@ -57,21 +57,42 @@ const ServiceDetailPage = () => {
       <div className="Body">
         <div className="service-detail__container">
           <div className="service-detail__info">
-            <h2>{service.titulo}</h2>
-            <p><strong>Descripción:</strong> {service.descripcion}</p>
-            <p><strong>Precio:</strong> ${service.precio}</p>
-            <p><strong>Categoría:</strong> {service.categoria}</p>
-            <p><strong>Zona:</strong> {service.zona}</p>
-            {service.duracion != null && (
-              <p><strong>Duración:</strong> {service.duracion} horas</p>
-            )}
-            {service.imagenUrl && (
-              <img
-                src={service.imagenUrl}
-                alt={service.titulo}
-                className="service-detail__image"
-              />
-            )}
+          <h2>{service.titulo}</h2>
+          <p><strong>Prestador:</strong> {service.prestador?.nombre}</p>
+          <p><strong>Descripción:</strong> {service.descripcion}</p>
+          <p><strong>Precio:</strong> ${service.precio}</p>
+          <p><strong>Categoría:</strong> {service.categoria}</p>
+          <p><strong>Zona:</strong> {service.zona}</p>
+
+          {service.prestador?.rating_promedio_global ? (
+          <p>
+            <strong>⭐ Evaluación del prestador:</strong>{' '}
+            {Array.from({ length: 5 }, (_, i) => (
+              <span key={i} style={{ color: i < Math.round(service.prestador.rating_promedio_global) ? '#FFD700' : '#ccc' }}>
+                ★
+              </span>
+            ))}
+            {' '}
+            ({service.prestador.rating_promedio_global}/5)
+          </p>
+          ) : (
+            <p><strong>⭐ Evaluación del prestador:</strong> Aún sin calificaciones</p>
+          )}
+
+
+
+
+          {service.duracion != null && (
+            <p><strong>Duración:</strong> {service.duracion} horas</p>
+          )}
+          {service.imagenUrl && (
+            <img
+              src={service.imagenUrl}
+              alt={service.titulo}
+              className="service-detail__image"
+            />
+          )}
+
 
             {/* Botón para abrir/cerrar chat */}
             {userRole === 'usuario' && (

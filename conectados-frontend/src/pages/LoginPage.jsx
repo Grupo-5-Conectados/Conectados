@@ -22,8 +22,9 @@ const LoginPage = () => {
       const resp = await login({ correo: formData.correo, password: formData.password });
       const token = resp.data.data.token;
       localStorage.setItem('token', token);
-      const { rol } = jwtDecode(token);
+      const { rol, id } = jwtDecode(token);
       localStorage.setItem('userRole', rol);
+      localStorage.setItem('userId', id); //
       if (rol === 'admin')       navigate('/panel-admin');
       else if (rol === 'prestador') navigate('/crear');
       else                          navigate('/servicios');

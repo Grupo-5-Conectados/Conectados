@@ -45,7 +45,9 @@ const ChatPage = () => {
       <ChatWindow
         servicioId={svc.id}
         otherUserId={otherUserId}
+        meId={me.id}
       />
+
       </div>
       <Footer />
     </div>

@@ -95,4 +95,13 @@ export function sendMessage(servicioId, toUserId, content) {
   return api.post(`/chats/${servicioId}`, { toUserId, content });
 }
 
+// Reviews
+export function createReview(data) {
+  return api.post('/reviews', data);
+}
+export function getMyReviews() {
+  return api.get('/usuarios/mis-reviews');
+}
+
+
 export default api;
