@@ -203,9 +203,20 @@ Conexión Github con Slack
 Utilización de Jira
 ![Jira](https://github.com/user-attachments/assets/b8c06bcf-8df5-44ce-9b1e-79138100e14d)
 
+Integración Jenkins Slack
+![image](https://github.com/user-attachments/assets/e9cd17cc-7f0a-4963-a4f9-13ee9771da91)
+
+Integración Jenkins Github 
+![JenkiHUb](https://github.com/user-attachments/assets/d037923c-a2b9-40fa-96f8-9367702a6ee8)
+
+Integración Github Jenkins local con Ngrok
+![image](https://github.com/user-attachments/assets/5493fc05-91da-47f4-9c49-bb5a7fb78591)
+
 ## Integración Continua y Despliegue Continuo (CI/CD)
 
 Este proyecto incorpora Jenkins como herramienta principal de CI/CD para automatizar el proceso de integración, pruebas y despliegue de la aplicación.
+
+Jenkins se encuentra integrado al repositorio tanto como Dashboard como Pipeline con apoyo de la herramienta Ngrok. 
 
 ## Nuevas funcionalidades
 
