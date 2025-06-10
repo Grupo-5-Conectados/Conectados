@@ -1,3 +1,14 @@
+# Entrega 2
+
+- Claudio Villagrán 
+- Manuel Vargas 
+- Valentina Lepín 
+- Tamara León 
+
+[Wiki](https://github.com/Grupo-5-Conectados/Conectados/wiki)
+
+[Video de entrega 2](https://youtu.be/mrAmQ8Vj6zM)
+
 # Proyecto Conectados
 
 Este repositorio contiene dos aplicaciones independientes:
