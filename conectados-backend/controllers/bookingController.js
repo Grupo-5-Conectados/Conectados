@@ -32,6 +32,11 @@ exports.createBooking = async (req, res) => {
     await slot.update({ disponible: false });
 
     const nueva = await Booking.create({ usuarioId, servicioId, fecha_hora });
+    await require('../models').Notificacion.create({
+      usuarioId: servicio.prestadorId,
+      tipo: 'reserva',
+      mensaje: 'Has recibido una nueva reserva.'
+    });
     return res.status(201).json({ code: 201, data: nueva });
   } catch (error) {
     console.error('Error en createBooking:', error);
