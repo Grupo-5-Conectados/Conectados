@@ -1,5 +1,5 @@
 // controllers/reviewController.js
-const { Review, Booking, Servicio, Usuario } = require('../models');
+const { Review, Booking, Servicio, Usuario, Notificacion } = require('../models');
 
 exports.createReview = async (req, res) => {
   const usuarioId = req.user.id;
@@ -26,6 +26,15 @@ exports.createReview = async (req, res) => {
     }
 
     const review = await Review.create({ usuarioId, servicioId, puntuacion, comentario });
+
+    // Buscar el servicio para obtener el prestador
+    const servicio = await Servicio.findByPk(servicioId);
+
+    await Notificacion.create({
+      usuarioId: servicio.prestadorId,
+      tipo: 'review',
+      mensaje: 'Has recibido una nueva calificación en uno de tus servicios.'
+    });
     return res.status(201).json({ code: 201, data: review });
   } catch (error) {
     console.error('Error en createReview:', error);
