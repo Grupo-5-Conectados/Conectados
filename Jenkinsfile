@@ -26,7 +26,6 @@ pipeline {
     stage('Instalar dependencias backend') {
       steps {
         sh 'npm install'
-        sh 'npx playwright install'
       }
     }
 
@@ -38,10 +37,16 @@ pipeline {
       }
     }
 
+    stage('Instalar dependencias de Selenium') {
+      steps {
+        sh 'npm install selenium-webdriver chromedriver'
+      }
+    }
+
     stage('Levantar backend') {
       steps {
         sh 'nohup npm run start &'
-        sleep 5
+        sleep time: 5, unit: 'SECONDS'
       }
     }
 
@@ -55,32 +60,19 @@ pipeline {
           sh 'nohup npm start &'
         }
         sleep time: 10, unit: 'SECONDS'
-        }
-      }
-
-    stage('Ejecutar pruebas E2E (Playwright)') {
-      steps {
-        sh 'npx playwright test --reporter=html'
       }
     }
 
-    stage('Publicar reporte HTML de Playwright') {
+    stage('Ejecutar pruebas E2E (Selenium)') {
       steps {
-        publishHTML(target: [
-          reportDir: 'playwright-report',
-          reportFiles: 'index.html',
-          reportName: 'Playwright Report',
-          alwaysLinkToLastBuild: true,
-          keepAll: true
-        ])
+        sh 'node tests/selenium/login.test.js'
       }
     }
   }
 
   post {
     always {
-      archiveArtifacts artifacts: '**/playwright-report/**', allowEmptyArchive: true
-      junit testResults: '**/test-results/**/*.xml', allowEmptyResults: true
+      archiveArtifacts artifacts: '**/tests/selenium/*.js', allowEmptyArchive: true
     }
   }
 }
