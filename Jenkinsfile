@@ -65,14 +65,14 @@ pipeline {
 
     stage('Ejecutar pruebas E2E (Selenium)') {
       steps {
-        sh 'node tests/selenium/login.test.js'
+        sh 'node tests/login.test.js'
       }
     }
   }
 
   post {
     always {
-      archiveArtifacts artifacts: '**/tests/selenium/*.js', allowEmptyArchive: true
+      archiveArtifacts artifacts: '**/tests/*.js', allowEmptyArchive: true
     }
   }
 }
