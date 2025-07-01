@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Pruebas Selenium - Conectados</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 5px; }
+        .passed { color: #28a745; font-weight: bold; }
+        .failed { color: #dc3545; font-weight: bold; }
+        .error { background: #ffe6e6; padding: 15px; margin: 10px 0; border-left: 4px solid #dc3545; border-radius: 3px; }
+        .timestamp { color: #666; font-size: 12px; }
+        .test-item { margin: 10px 0; padding: 10px; border-radius: 3px; }
+        .test-passed { background: #d4edda; border-left: 4px solid #28a745; }
+        .test-failed { background: #f8d7da; border-left: 4px solid #dc3545; }
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+        .stat-box { text-align: center; padding: 15px; border-radius: 5px; }
+        .stat-total { background: #e3f2fd; }
+        .stat-passed { background: #e8f5e8; }
+        .stat-failed { background: #ffebee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Reporte de Pruebas Selenium - Conectados</h1>
+            <p class="timestamp">Generado: 6/30/2025, 11:19:12 AM</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box stat-total">
+                <h3>Total</h3>
+                <h2>10</h2>
+            </div>
+            <div class="stat-box stat-passed">
+                <h3>Exitosas</h3>
+                <h2 class="passed">10</h2>
+            </div>
+            <div class="stat-box stat-failed">
+                <h3>Fallidas</h3>
+                <h2 class="failed">0</h2>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <h2>📊 Resumen de Ejecución</h2>
+            <p><strong>Tiempo de ejecución:</strong> 5s</p>
+            <p><strong>Porcentaje de éxito:</strong> 100%</p>
+        </div>
+        
+        <div class="summary"><h2>🎉 ¡Todas las pruebas pasaron exitosamente!</h2></div>
+        
+        <div class="summary">
+            <h2>📋 Información del Sistema</h2>
+            <p><strong>Proyecto:</strong> Conectados - Plataforma de Servicios</p>
+            <p><strong>Frontend:</strong> React (puerto 3000)</p>
+            <p><strong>Backend:</strong> Node.js + Express (puerto 4000)</p>
+            <p><strong>Navegador:</strong> Chrome (Selenium WebDriver)</p>
+        </div>
+    </div>
+</body>
+</html>

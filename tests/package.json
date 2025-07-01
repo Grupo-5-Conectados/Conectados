@@ -1,0 +1,35 @@
+{
+  "name": "conectados-selenium-tests",
+  "version": "1.0.0",
+  "description": "Pruebas de interfaz con Selenium para el proyecto Conectados",
+  "main": "run-all-tests.js",
+  "scripts": {
+    "test": "node run-all-tests.js",
+    "test:simple": "node simple-test.js",
+    "test:debug": "node debug-test.js",
+    "test:auth": "node auth.test.js",
+    "test:services": "node services.test.js",
+    "test:admin": "node admin.test.js",
+    "test:chrome": "node -e \"const { createDriver } = require('./selenium.config'); createDriver().then(d => d.quit())\"",
+    "report": "start reports/test-report.html"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.15.0",
+    "chromedriver": "^119.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "selenium",
+    "testing",
+    "e2e",
+    "conectados",
+    "automation"
+  ],
+  "author": "Grupo 5 Conectados",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
