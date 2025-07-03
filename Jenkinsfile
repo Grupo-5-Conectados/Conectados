@@ -26,7 +26,7 @@ pipeline {
     stage('Instalar dependencias backend') {
       steps {
         dir('conectados-backend') {
-          sh 'npm install'
+          bat 'npm install'
         }
       }
     }
@@ -34,7 +34,7 @@ pipeline {
     stage('Instalar dependencias frontend') {
       steps {
         dir('conectados-frontend') {
-          sh 'npm install'
+          bat 'npm install'
         }
       }
     }
@@ -42,26 +42,26 @@ pipeline {
     stage('Instalar dependencias de tests') {
       steps {
         dir('tests') {
-          sh 'npm install'
+          bat 'npm install'
         }
       }
     }
 
     stage('Verificar herramientas') {
       steps {
-        sh 'node -v'
-        sh 'npm -v'
-        sh 'which wait-on || true'
-        sh 'wait-on --version || true'
+        bat 'node -v'
+        bat 'npm -v'
+        bat 'which wait-on || true'
+        bat 'wait-on --version || true'
       }
     }
 
     stage('Levantar backend') {
       steps {
         dir('conectados-backend') {
-          sh 'nohup npm start &'
+          bat 'nohup npm start &'
         }
-        sh 'npx wait-on http://localhost:4000/api/health'
+        bat 'npx wait-on http://localhost:4000/api/health'
       }
     }
 
@@ -72,16 +72,16 @@ pipeline {
       }
       steps {
         dir('conectados-frontend') {
-          sh 'nohup npm start &'
+          bat 'nohup npm start &'
         }
-        sh 'npx wait-on http://localhost:3000'
+        bat 'npx wait-on http://localhost:3000'
       }
     }
 
     stage('Ejecutar pruebas automatizadas') {
       steps {
         dir('tests') {
-          sh 'node run-all-tests.js'
+          bat 'node run-all-tests.js'
         }
       }
     }
@@ -89,7 +89,7 @@ pipeline {
 
   post {
     always {
-      archiveArtifacts artifacts: '**/tests/screenshots/**, **/tests/reports/**', allowEmptyArchive: true
+      archiveArtifacts artifacts: '**/tests/screenbatots/**, **/tests/reports/**', allowEmptyArchive: true
     }
     failure {
       echo 'La ejecución falló. Revisa los logs y capturas.'
