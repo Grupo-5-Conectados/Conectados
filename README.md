@@ -1,4 +1,4 @@
-# Entrega 2
+# Entrega 3
 
 - Claudio Villagrán 
 - Manuel Vargas 
@@ -7,7 +7,7 @@
 
 [Wiki](https://github.com/Grupo-5-Conectados/Conectados/wiki)
 
-[Video de entrega 2](https://youtu.be/mrAmQ8Vj6zM)
+[Pruebas de Selenium](https://github.com/Grupo-5-Conectados/Conectados/wiki/Pruebas-de-Selenium)
 
 # Proyecto Conectados
 
