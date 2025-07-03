@@ -51,7 +51,7 @@ pipeline {
       steps {
         bat 'node -v'
         bat 'npm -v'
-        bat 'which wait-on || true'
+        bat 'where wait-on || exit 0'
         bat 'wait-on --version || true'
       }
     }
