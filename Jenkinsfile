@@ -11,7 +11,7 @@ pipeline {
     PORT = '4000'
     DB_HOST = 'localhost'
     DB_USER = 'root'
-    DB_PASSWORD = 'password'
+    DB_PASSWORD = '03Valepin08'
     DB_NAME = 'conectados'
     JWT_SECRET = 'UnaClaveSegura'
   }
@@ -25,7 +25,9 @@ pipeline {
 
     stage('Instalar dependencias backend') {
       steps {
-        sh 'npm install'
+        dir('conectados-backend') {
+          sh 'npm install'
+        }
       }
     }
 
@@ -37,16 +39,29 @@ pipeline {
       }
     }
 
-    stage('Instalar dependencias de Selenium') {
+    stage('Instalar dependencias de tests') {
       steps {
-        sh 'npm install selenium-webdriver chromedriver'
+        dir('tests') {
+          sh 'npm install'
+        }
+      }
+    }
+
+    stage('Verificar herramientas') {
+      steps {
+        sh 'node -v'
+        sh 'npm -v'
+        sh 'which wait-on || true'
+        sh 'wait-on --version || true'
       }
     }
 
     stage('Levantar backend') {
       steps {
-        sh 'nohup npm run start &'
-        sleep time: 5, unit: 'SECONDS'
+        dir('conectados-backend') {
+          sh 'nohup npm start &'
+        }
+        sh 'npx wait-on http://localhost:4000/api/health'
       }
     }
 
@@ -59,20 +74,28 @@ pipeline {
         dir('conectados-frontend') {
           sh 'nohup npm start &'
         }
-        sleep time: 10, unit: 'SECONDS'
+        sh 'npx wait-on http://localhost:3000'
       }
     }
 
-    stage('Ejecutar pruebas E2E (Selenium)') {
+    stage('Ejecutar pruebas automatizadas') {
       steps {
-        sh 'node tests/login.test.js'
+        dir('tests') {
+          sh 'node run-all-tests.js'
+        }
       }
     }
   }
 
   post {
     always {
-      archiveArtifacts artifacts: '**/tests/*.js', allowEmptyArchive: true
+      archiveArtifacts artifacts: '**/tests/screenshots/**, **/tests/reports/**', allowEmptyArchive: true
+    }
+    failure {
+      echo 'La ejecución falló. Revisa los logs y capturas.'
+    }
+    success {
+      echo 'Pruebas completadas correctamente.'
     }
   }
 }
