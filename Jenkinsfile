@@ -52,15 +52,17 @@ pipeline {
         bat 'node -v'
         bat 'npm -v'
         bat 'where wait-on || exit 0'
-        bat 'wait-on --version || true'
+        bat 'npx wait-on --version || exit 0'
       }
     }
 
     stage('Levantar backend') {
       steps {
         dir('conectados-backend') {
-          bat 'nohup npm start &'
+          // Levantar backend en segundo plano (con start /b en Windows)
+          bat 'start /b cmd /c "npm start > backend.log 2>&1"'
         }
+        // Esperar a que el backend esté levantado
         bat 'npx wait-on http://localhost:4000/api/health'
       }
     }
@@ -72,7 +74,8 @@ pipeline {
       }
       steps {
         dir('conectados-frontend') {
-          bat 'nohup npm start &'
+          // Levantar frontend en segundo plano
+          bat 'start /b cmd /c "npm start > frontend.log 2>&1"'
         }
         bat 'npx wait-on http://localhost:3000'
       }
@@ -89,7 +92,7 @@ pipeline {
 
   post {
     always {
-      archiveArtifacts artifacts: '**/tests/screenbatots/**, **/tests/reports/**', allowEmptyArchive: true
+      archiveArtifacts artifacts: '**/tests/screenshots/**, **/tests/reports/**', allowEmptyArchive: true
     }
     failure {
       echo 'La ejecución falló. Revisa los logs y capturas.'
