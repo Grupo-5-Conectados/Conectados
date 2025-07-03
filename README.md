@@ -227,7 +227,21 @@ Integración Github Jenkins local con Ngrok
 
 Este proyecto incorpora Jenkins como herramienta principal de CI/CD para automatizar el proceso de integración, pruebas y despliegue de la aplicación.
 
-Jenkins se encuentra integrado al repositorio tanto como Dashboard como Pipeline con apoyo de la herramienta Ngrok. 
+Jenkins se encuentra integrado al repositorio con el formato de Pipeline con apoyo de la herramienta Ngrok. 
+
+## Evidencia de Pruebas automatizadas (Builds) 
+
+Para las pruebas automatizadas se debe configurar el Jenkinsfile para ejecutar las pruebas.
+
+![image](https://github.com/user-attachments/assets/dde18c14-70fb-4a51-9bc8-de4f13139d3a)
+
+![image](https://github.com/user-attachments/assets/df92c814-ccb8-4be3-bb00-f6fe2f8ab54c)
+
+![imagen](https://github.com/user-attachments/assets/37ef180c-a372-403c-ace1-1b5275cddb34)
+
+![image](https://github.com/user-attachments/assets/f7e976b4-fed3-47ca-b54b-3ddc945d725a)
+
+
  
 ## Nuevas funcionalidades
 
